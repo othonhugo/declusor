@@ -22,8 +22,5 @@ Issues = "https://github.com/othonhugo/declusor/issues"
 lint = ["flake8"]
 dev = ["mypy"]
 
-[tool.black]
-line-length = 79
-
 [tool.isort]
 profile = "black"
