@@ -1,5 +1,5 @@
 from config import InvalidArgument
-from interfaces import IRouter, ISession
+from interface import IRouter, ISession
 from util import (
     load_payload,
     parse_command_arguments,

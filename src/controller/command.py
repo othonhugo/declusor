@@ -1,4 +1,4 @@
-from interfaces import IRouter, ISession
+from interface import IRouter, ISession
 from util import parse_command_arguments, write_binary_message
 
 

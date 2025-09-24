@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable
 
-from interfaces.session import ISession
+from interface.session import ISession
 
 Controller = Callable[["ISession", "IRouter", str], None]
 

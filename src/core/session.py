@@ -2,7 +2,7 @@ from select import select
 from socket import socket
 from typing import Generator
 
-from interfaces import ISession
+from interface import ISession
 from util import load_library, write_warninig_message
 
 

@@ -1,5 +1,5 @@
 from config import InvalidRoute
-from interfaces import Controller, IRouter
+from interface import Controller, IRouter
 
 
 class Router(IRouter):

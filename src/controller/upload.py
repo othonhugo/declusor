@@ -1,7 +1,7 @@
 from base64 import b64encode
 
 from config import InvalidArgument
-from interfaces import IRouter, ISession
+from interface import IRouter, ISession
 from util import (
     format_bash_function_call,
     load_file,

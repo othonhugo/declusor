@@ -1,5 +1,5 @@
 from config import DeclusorException
-from interfaces import IPrompt, IRouter, ISession
+from interface import IPrompt, IRouter, ISession
 from util import read_message, write_error_message
 
 
