@@ -9,7 +9,7 @@ from util import (
 
 
 def call_load(session: ISession, router: IRouter, line: str) -> None:
-    """Load and execute a payload file on the target host."""
+    """Load a payload from a file and send it to the remote system."""
 
     arguments, _ = parse_command_arguments(line, {"payload": str})
 

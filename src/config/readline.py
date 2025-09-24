@@ -4,6 +4,8 @@ from os.path import basename, dirname, isdir, isfile, join
 
 
 def search_file(search_term: str) -> list[str]:
+    """Search for files and directories matching the search term."""
+
     files = list()
 
     searching_dir = dirname(search_term)
@@ -22,6 +24,8 @@ def search_file(search_term: str) -> list[str]:
 
 
 def set_line_completer(*command_routes: str) -> None:
+    """Set up the readline completer for command line input."""
+
     def find_file(text: str, state: int) -> str | None:
         return (search_file(text) + [None])[state]
 

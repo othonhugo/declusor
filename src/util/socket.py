@@ -4,9 +4,9 @@ from typing import Generator
 
 
 @contextmanager
-def await_connection(
-    host: str, port: int
-) -> Generator[socket.socket, None, None]:
+def await_connection(host: str, port: int) -> Generator[socket.socket, None, None]:
+    """Context manager that listens for incoming connections on a specified host and port."""
+
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         try:
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -20,6 +20,8 @@ def await_connection(
 
 
 def handle_socket_exception(err: Exception) -> None:
+    """Handle socket-related exceptions and provide user-friendly error messages."""
+
     exception_message_table = {
         socket.gaierror: "invalid address/hostname.",
         OverflowError: "port must be 0-65535.",

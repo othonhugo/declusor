@@ -30,7 +30,7 @@ class Session(ISession):
         self.connection.settimeout(value)
 
     def read_all(self, bufsize: int = bufsize) -> Generator[bytes, None, None]:
-        """Read and yield ALL data as soon as it receives."""
+        """Read and yield all data until the connection is closed."""
 
         while True:
             readable = select([self.connection], [], [], self.timeout)[0]
@@ -45,7 +45,7 @@ class Session(ISession):
                     raise ConnectionResetError
 
     def read(self) -> Generator[bytes, None, None]:
-        """Read and yield data until it receives the acknowledge message."""
+        """Read and yield data until the server ACK is received."""
 
         buffer = b""
 

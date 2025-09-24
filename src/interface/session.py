@@ -16,5 +16,5 @@ class ISession(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def write(self, data: bytes) -> None:
+    def write(self, content: bytes) -> None:
         raise NotImplementedError

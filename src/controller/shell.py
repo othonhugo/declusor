@@ -5,7 +5,7 @@ from util import parse_command_arguments, read_message, write_binary_message
 
 
 def call_shell(session: ISession, router: IRouter, line: str) -> None:
-    """Open an interactive shell session with the target host."""
+    """Open an interactive shell session with the target device."""
 
     parse_command_arguments(line, {})
 

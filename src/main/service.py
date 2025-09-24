@@ -9,6 +9,8 @@ from interface import IRouter
 
 
 def set_routes(router: IRouter) -> None:
+    """Set up the routes for the router."""
+
     router.connect("load", controller.call_load)
     router.connect("command", controller.call_command)
     router.connect("shell", controller.call_shell)
@@ -19,6 +21,8 @@ def set_routes(router: IRouter) -> None:
 
 
 def run_service(host: str, port: int, client: str) -> None:
+    """Run the main service loop."""
+
     directories = [config.CLIENTS_DIR, config.SCRIPTS_DIR, config.LIBRARY_DIR]
 
     set_routes(router := Router())
@@ -36,7 +40,7 @@ def run_service(host: str, port: int, client: str) -> None:
     print(format_client_bash_code(client, HOST=host, PORT=port))
 
     with await_connection(host, port) as connection:
-        session = Session(connection, config.SRV_ACK, config.CLT_ACK)
+        session = Session(connection, config.DEFAULT_SRV_ACK, config.DEFAULT_CLT_ACK)
 
         prompt = PromptCLI(router, session)
         prompt.run()

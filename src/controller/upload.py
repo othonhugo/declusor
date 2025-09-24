@@ -12,9 +12,9 @@ from util import (
 
 
 def call_upload(session: ISession, router: IRouter, line: str) -> None:
-    """Upload a file to the target host."""
+    """Uploads a file to the target machine."""
 
-    arguments, _ = parse_command_arguments(line, {"filepath": str}, split=False)
+    arguments, _ = parse_command_arguments(line, {"filepath": str})
 
     try:
         file_content = load_file(arguments["filepath"])

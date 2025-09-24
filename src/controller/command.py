@@ -3,7 +3,7 @@ from util import parse_command_arguments, write_binary_message
 
 
 def call_command(session: ISession, router: IRouter, line: str) -> None:
-    """Execute a single command on the target host."""
+    """Execute a command on the remote system."""
 
     arguments, _ = parse_command_arguments(line, {"command": str})
 

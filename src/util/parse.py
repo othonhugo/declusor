@@ -6,13 +6,7 @@ from config import ArgumentParsingError
 
 
 class DeclusorArgumentParser(ArgumentParser):
-    """
-    A custom ArgumentParser that raises ArgumentParsingError on parsing errors.
-
-    This class overrides the default error handling of ArgumentParser to raise
-    a custom exception instead of exiting the program, allowing for more flexible
-    error management in the calling code.
-    """
+    """Custom ArgumentParser that raises ArgumentParsingError on errors."""
 
     def error(self, message: str) -> NoReturn:
         """Overrides the default error method to raise a custom exception."""
@@ -21,24 +15,16 @@ class DeclusorArgumentParser(ArgumentParser):
 
 
 def parse_command_arguments(
-    line: str,
-    arg_definitions: dict[str, type],
-    allow_unknown: bool = False
+    line: str, definitions: dict[str, type], allow_unknown: bool = False
 ) -> tuple[dict[str, str], list[str]]:
-    """
-    Parses a string of command-line-like arguments using a custom ArgumentParser.
+    """Parses command arguments from a string based on provided definitions."""
 
-    This function takes a string, splits it into arguments using shlex, and then
-    parses these arguments based on the provided argument definitions. It allows
-    for custom error handling by raising `ArgumentParsingError`.
-    """
-
-    if not arg_definitions and not line.strip():
+    if not definitions and not line.strip():
         return {}, []
 
     parser = DeclusorArgumentParser(add_help=False, exit_on_error=False)
 
-    for arg_name, arg_type in arg_definitions.items():
+    for arg_name, arg_type in definitions.items():
         if arg_type not in [str, int]:
             raise TypeError(f"Argument type {arg_type!r} for {arg_name!r} is not supported.")
 

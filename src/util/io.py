@@ -7,6 +7,8 @@ from config import LIBRARY_DIR, SCRIPTS_DIR, InvalidArgument
 
 
 def load_payload(module: str) -> bytes:
+    """Load a payload script from the scripts directory."""
+
     if (extension := splitext(module)[1].casefold()) != ".sh":
         raise InvalidArgument(f"{extension!r} is not supported")
 
@@ -29,6 +31,8 @@ def load_payload(module: str) -> bytes:
 
 
 def load_library() -> bytes:
+    """Load all library scripts from the library directory."""
+
     modules = []
 
     for file in scandir(LIBRARY_DIR):
@@ -44,6 +48,8 @@ def load_library() -> bytes:
 
 
 def load_file(filepath: str) -> bytes:
+    """Load a file from the filesystem."""
+
     if not exists(filepath):
         raise InvalidArgument(f"file not found: {filepath}")
 
@@ -56,24 +62,34 @@ def load_file(filepath: str) -> bytes:
 
 
 def read_message(prompt: str = "") -> str:
+    """Read a message from standard input and strip whitespace."""
+
     return input(prompt).strip()
 
 
 def write_message(message: str) -> None:
+    """Write a message to standard output."""
+
     sys.stdout.write(message + "\n")
     sys.stdout.buffer.flush()
 
 
 def write_binary_message(message: bytes) -> None:
+    """Write a binary message to standard output."""
+
     sys.stdout.buffer.write(message)
     sys.stdout.buffer.flush()
 
 
 def write_error_message(message: str) -> None:
+    """Write an error message to standard error."""
+
     sys.stderr.write(f"error: {message}\n".lower())
     sys.stderr.flush()
 
 
 def write_warninig_message(message: str) -> None:
+    """Write a warning message to standard error."""
+
     sys.stderr.write(f"warning: {message}\n".lower())
     sys.stderr.flush()

@@ -1,4 +1,6 @@
 def handle_exception(err: Exception | KeyboardInterrupt) -> None:
+    """Handle exceptions and exit the program with an appropriate message."""
+
     exception_message_table = {
         FileNotFoundError: "file or directory not found: {}".format(err),
         NotADirectoryError: "not a directory: {}".format(err),

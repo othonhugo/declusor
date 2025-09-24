@@ -12,10 +12,10 @@ from util import (
 
 
 def call_execute(session: ISession, router: IRouter, line: str) -> None:
-    """Upload and execute a file on the target host."""
+    """Execute a file on the remote system."""
 
     arguments, unknown_arguments = parse_command_arguments(
-        line, {"filepath": str}, split=True, allow_unknown=True
+        line, {"filepath": str}, allow_unknown=True
     )
 
     try:

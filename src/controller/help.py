@@ -3,7 +3,7 @@ from util import write_message
 
 
 def call_help(session: ISession, router: IRouter, line: str) -> None:
-    """Display usage information for available commands."""
+    """Display help information about available commands."""
 
     if line:
         write_message(router.get_controller_documentation(line))
