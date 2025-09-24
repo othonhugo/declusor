@@ -4,7 +4,7 @@ from interfaces import IRouter, ISession
 from services import parse_arguments, read_message, write_binary_message
 
 
-def shell_controller(session: ISession, router: IRouter, line: str) -> None:
+def call_shell(session: ISession, router: IRouter, line: str) -> None:
     """Open an interactive shell session with the target host."""
 
     parse_arguments(line, {})

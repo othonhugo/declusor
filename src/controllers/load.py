@@ -8,7 +8,7 @@ from services import (
 )
 
 
-def load_controller(session: ISession, router: IRouter, line: str) -> None:
+def call_load(session: ISession, router: IRouter, line: str) -> None:
     """Load and execute a payload file on the target host."""
 
     arguments, _ = parse_arguments(line, {"payload": str})

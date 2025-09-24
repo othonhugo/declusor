@@ -2,7 +2,7 @@ from interfaces import IRouter, ISession
 from services import parse_arguments, write_binary_message
 
 
-def command_controller(session: ISession, router: IRouter, line: str) -> None:
+def call_command(session: ISession, router: IRouter, line: str) -> None:
     """Execute a single command on the target host."""
 
     arguments, _ = parse_arguments(line, {"command": str})

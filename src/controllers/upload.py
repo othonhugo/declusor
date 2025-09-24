@@ -11,7 +11,7 @@ from services import (
 )
 
 
-def upload_controller(session: ISession, router: IRouter, line: str) -> None:
+def call_upload(session: ISession, router: IRouter, line: str) -> None:
     """Upload a file to the target host."""
 
     arguments, _ = parse_arguments(line, {"filepath": str}, split=False)

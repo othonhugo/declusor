@@ -11,7 +11,7 @@ from services import (
 )
 
 
-def execute_controller(session: ISession, router: IRouter, line: str) -> None:
+def call_execute(session: ISession, router: IRouter, line: str) -> None:
     """Upload and execute a file on the target host."""
 
     arguments, unknown_arguments = parse_arguments(
