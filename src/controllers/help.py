@@ -1,5 +1,5 @@
 from interfaces import IRouter, ISession
-from services import write_message
+from util import write_message
 
 
 def call_help(session: ISession, router: IRouter, line: str) -> None:

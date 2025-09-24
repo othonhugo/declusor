@@ -1,5 +1,5 @@
 from interfaces import IRouter, ISession
-from services import parse_command_arguments, write_binary_message
+from util import parse_command_arguments, write_binary_message
 
 
 def call_command(session: ISession, router: IRouter, line: str) -> None:

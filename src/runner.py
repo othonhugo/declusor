@@ -4,7 +4,7 @@ from os.path import exists, isdir
 import config
 from infra import PromptCLI, Session, Router
 from route import set_routes
-from services import await_connection, format_client_bash_code
+from util import await_connection, format_client_bash_code
 
 
 def run_service(host: str, port: int, client: str) -> None:

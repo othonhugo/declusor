@@ -1,6 +1,6 @@
 from config import DeclusorException
 from interfaces import IPrompt, IRouter, ISession
-from services import read_message, write_error_message
+from util import read_message, write_error_message
 
 
 class PromptCLI(IPrompt):

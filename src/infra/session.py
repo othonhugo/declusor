@@ -3,7 +3,7 @@ from socket import socket
 from typing import Generator
 
 from interfaces import ISession
-from services import load_library, write_warninig_message
+from util import load_library, write_warninig_message
 
 
 class Session(ISession):
@@ -51,7 +51,7 @@ class Session(ISession):
 
         for data in self.read_all():
             # append data to a reduced size buffer
-            buffer = buffer[len(buffer) - len(self.server_ack) :] + data
+            buffer = buffer[len(buffer) - len(self.server_ack):] + data
 
             # assign the index value of where the ACK could be
             ack_index = len(buffer) - len(self.server_ack)
@@ -62,7 +62,7 @@ class Session(ISession):
                 buffer_data_index = len(buffer) - len(data)
 
                 # reassign data value without ACK response
-                data = buffer[buffer_data_index : -len(self.server_ack)]
+                data = buffer[buffer_data_index: -len(self.server_ack)]
 
             yield data
 

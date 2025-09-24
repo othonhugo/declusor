@@ -1,7 +1,7 @@
 from threading import Event, Thread
 
 from interfaces import IRouter, ISession
-from services import parse_command_arguments, read_message, write_binary_message
+from util import parse_command_arguments, read_message, write_binary_message
 
 
 def call_shell(session: ISession, router: IRouter, line: str) -> None:
