@@ -4,11 +4,11 @@ from os.path import exists, isdir
 import config
 from infra import PromptCLI, Session, Router
 from route import set_routes
-from services import await_connection, format_client_code
+from services import await_connection, format_client_bash_code
 
 
 def run_service(host: str, port: int, client: str) -> None:
-    directories = [config.CLIENTS_DIR, config.PAYLOAD_DIR, config.LIBRARY_DIR]
+    directories = [config.CLIENTS_DIR, config.SCRIPTS_DIR, config.LIBRARY_DIR]
 
     set_routes(router := Router())
 
@@ -19,10 +19,10 @@ def run_service(host: str, port: int, client: str) -> None:
         else:
             raise FileNotFoundError(config.CLIENTS_DIR)
 
-    chdir(config.PAYLOAD_DIR)
+    chdir(config.SCRIPTS_DIR)
     config.set_line_completer(*router.routes)
 
-    print(format_client_code(client, HOST=host, PORT=port))
+    print(format_client_bash_code(client, HOST=host, PORT=port))
 
     with await_connection(host, port) as connection:
         session = Session(connection, config.SRV_ACK, config.CLT_ACK)

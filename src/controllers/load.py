@@ -2,7 +2,7 @@ from config import InvalidArgument
 from interfaces import IRouter, ISession
 from services import (
     load_payload,
-    parse_arguments,
+    parse_command_arguments,
     write_binary_message,
     write_error_message,
 )
@@ -11,7 +11,7 @@ from services import (
 def call_load(session: ISession, router: IRouter, line: str) -> None:
     """Load and execute a payload file on the target host."""
 
-    arguments, _ = parse_arguments(line, {"payload": str})
+    arguments, _ = parse_command_arguments(line, {"payload": str})
 
     try:
         payload = load_payload(arguments["payload"])

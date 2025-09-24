@@ -1,14 +1,16 @@
+import sys
+
 from os import scandir
 from os.path import exists, isfile, join, splitext
 
-from config import LIBRARY_DIR, PAYLOAD_DIR, InvalidArgument
+from config import LIBRARY_DIR, SCRIPTS_DIR, InvalidArgument
 
 
 def load_payload(module: str) -> bytes:
     if (extension := splitext(module)[1].casefold()) != ".sh":
         raise InvalidArgument(f"{extension!r} is not supported")
 
-    module_filepath = join(PAYLOAD_DIR, module)
+    module_filepath = join(SCRIPTS_DIR, module)
 
     if not exists(module_filepath):
         raise InvalidArgument(f"file not found: {module}")
@@ -51,3 +53,27 @@ def load_file(filepath: str) -> bytes:
     else:
         with open(filepath, "rb") as f:
             return f.read()
+
+
+def read_message(prompt: str = "") -> str:
+    return input(prompt).strip()
+
+
+def write_message(message: str) -> None:
+    sys.stdout.write(message + "\n")
+    sys.stdout.buffer.flush()
+
+
+def write_binary_message(message: bytes) -> None:
+    sys.stdout.buffer.write(message)
+    sys.stdout.buffer.flush()
+
+
+def write_error_message(message: str) -> None:
+    sys.stderr.write(f"error: {message}\n".lower())
+    sys.stderr.flush()
+
+
+def write_warninig_message(message: str) -> None:
+    sys.stderr.write(f"warning: {message}\n".lower())
+    sys.stderr.flush()

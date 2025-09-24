@@ -3,9 +3,9 @@ from base64 import b64encode
 from config import InvalidArgument
 from interfaces import IRouter, ISession
 from services import (
-    format_bash_function,
+    format_bash_function_call,
     load_file,
-    parse_arguments,
+    parse_command_arguments,
     write_binary_message,
     write_error_message,
 )
@@ -14,7 +14,7 @@ from services import (
 def call_execute(session: ISession, router: IRouter, line: str) -> None:
     """Upload and execute a file on the target host."""
 
-    arguments, unknown_arguments = parse_arguments(
+    arguments, unknown_arguments = parse_command_arguments(
         line, {"filepath": str}, split=True, allow_unknown=True
     )
 
@@ -24,7 +24,7 @@ def call_execute(session: ISession, router: IRouter, line: str) -> None:
         write_error_message(str(err))
         return
 
-    function_call = format_bash_function(
+    function_call = format_bash_function_call(
         "execute_base64_encoded_value",
         b64encode(file_content).decode(),
         *unknown_arguments,

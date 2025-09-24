@@ -1,13 +1,13 @@
 from threading import Event, Thread
 
 from interfaces import IRouter, ISession
-from services import parse_arguments, read_message, write_binary_message
+from services import parse_command_arguments, read_message, write_binary_message
 
 
 def call_shell(session: ISession, router: IRouter, line: str) -> None:
     """Open an interactive shell session with the target host."""
 
-    parse_arguments(line, {})
+    parse_command_arguments(line, {})
 
     thread_event = Event()
 
