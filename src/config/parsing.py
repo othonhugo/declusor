@@ -1,10 +1,10 @@
 from argparse import ArgumentParser, HelpFormatter
 from typing import TYPE_CHECKING
 
+from config.default import DEFAULT_CLIENT
+
 if TYPE_CHECKING:
     from argparse import Namespace
-
-from config.default import DEFAULT_CLIENT
 
 
 def parse_opt(name: str, description: str, version: str) -> "Namespace":

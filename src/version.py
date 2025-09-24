@@ -1,5 +1,6 @@
-major, minor, patch = 2025, 9, 0
+major, minor, patch = 2025, 9, 1
 
-__name__ = "declusor"
-__description__ = "a versatile tool for delivering Bash payloads to Linux systems."
 __version__ = f"{major}.{minor}.{patch}"
+
+PROJECT_NAME = "declusor"
+PROJECT_DESCRIPTION = "a versatile tool for delivering Bash payloads to Linux systems."

@@ -1,11 +1,11 @@
 from config import DeclusorException
 from interface import IPrompt, IRouter, ISession
 from util import read_message, write_error_message
-from version import __name__
+from version import PROJECT_NAME
 
 
 class PromptCLI(IPrompt):
-    prompt = f"[{__name__}] "
+    prompt = f"[{PROJECT_NAME}] "
 
     def __init__(self, router: IRouter, session: ISession) -> None:
         self.router = router
