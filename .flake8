@@ -1,8 +1,0 @@
-[flake8]
-statistics = True
-max-line-length = 99
-max-complexity = 5
-per-file-ignores = __init__.py:F401
-extend-ignore = E203
-ignore = F403, F405, W503
-exclude = build, clients, data, .*

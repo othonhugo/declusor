@@ -1,7 +1,3 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "declusor"
 version = "2025.9.2"
@@ -22,5 +18,67 @@ Issues = "https://github.com/othonhugo/declusor/issues"
 lint = ["flake8"]
 dev = ["mypy"]
 
+[dependency-groups]
+dev = [
+    "pylint (>=3.3.8,<4.0.0)",
+    "mypy (>=1.18.2,<2.0.0)",
+    "black (>=25.9.0,<26.0.0)",
+    "isort (>=6.1.0,<7.0.0)",
+    "pytest (>=8.4.2)",
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.poetry]
+packages = [{ include = "declusor", from = "src" }]
+
+[tool.pylint.main]
+source-roots = "src/"
+max-line-length = 150
+recursive = true
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "too-few-public-methods",
+]
+ignore-paths = [".venv/", "build/", "tests/"]
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+exclude = ["tests/*"]
+pretty = true
+strict = true
+disallow_any_expr = false
+disallow_any_unimported = false
+disallow_subclassing_any = false
+
+[tool.black]
+line-length = 150
+target-version = ["py311"]
+exclude = '''
+/(
+    \.git
+| \.venv
+| build
+| dist
+| migrations
+| .venv
+)/
+'''
+
 [tool.isort]
 profile = "black"
+line_length = 79
+
+[tool.pytest.ini_options]
+addopts = "-raqsv --strict-markers --tb=no"
+pythonpath = ["src"]
+testpaths = ["tests"]
+norecursedirs = [".vscode", "__pycache__"]
