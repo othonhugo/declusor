@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  quality-assurance:
+    name: Code Quality & Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip' 
+
+      - name: Install dependencies and tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest isort mypy black pylint
+          pip install -e .
+
+      - name: Check formatting (Black)
+        run: black --check $(git ls-files '*.py') -v
+
+      - name: Check imports (Isort)
+        run: isort --check-only $(git ls-files '*.py') -v
+
+      - name: Type checking (Mypy)
+        run: mypy .
+
+      - name: Code linting (Pylint)
+        run: pylint $(git ls-files '*.py') -v
+
+      - name: Run tests (Pytest)
+        run: pytest
