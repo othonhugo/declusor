@@ -17,25 +17,33 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip' 
+          cache: 'pip'
 
-      - name: Install dependencies and tools
+      - name: Install Poetry
         run: |
-          python -m pip install --upgrade pip
-          pip install isort mypy black pylint
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Install dependencies
+        run: | 
+          poetry install --with dev
           pip install -e .
 
+      - name: Set PYTHONPATH
+        run: export PYTHONPATH="$PYTHONPATH:src"
+
       - name: Check formatting (Black)
-        run: black --check $(git ls-files '*.py') -v
+        run: poetry run black --check $(git ls-files '*.py') -v
 
       - name: Check imports (Isort)
-        run: isort --check-only $(git ls-files '*.py') -v
+        run: poetry run isort --check-only $(git ls-files '*.py') -v
 
       - name: Type checking (Mypy)
-        run: mypy .
+        run: poetry run mypy .
 
       - name: Code linting (Pylint)
-        run: pylint $(git ls-files '*.py') -v
+        run: poetry run pylint $(git ls-files '*.py') -v
 
-      - name: Run tests (Pytest)
-        run: python -m unittest discover tests
+      - name: Run tests (unittest)
+        run: poetry run python -m unittest discover tests

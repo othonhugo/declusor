@@ -1,10 +1,10 @@
 [tool.poetry]
 name = "declusor"
-version = "2025.11.0"
 description = "declusor is a versatile payload delivery handler designed to manage the delivery of Bash script payloads to Linux machines."
-authors = ["Othon Hugo <othonhugo@users.noreply.github.com>"]
+version = "0.2.0"
 readme = "README.md"
 license = "LICENSE"
+authors = ["Othon Hugo <othonhugo@users.noreply.github.com>"]
 keywords = ["bash", "security", "post-exploitation", "payload-delivery", "infosec"]
 classifiers = ["Development Status :: 4 - Beta", "Programming Language :: Python :: 3.10"]
 packages = [{ include = "declusor", from = "src" }]
@@ -17,14 +17,12 @@ Issues = "https://github.com/othonhugo/declusor/issues"
 [tool.poetry.dependencies]
 python = "^3.10"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.dev-dependencies]
 pylint = "^3.3.8"
 mypy = "^1.18.2"
 black = "^25.9.0"
 isort = "^6.1.0"
-pytest = "^8.4.2"
 hypothesis = "^6.0.0"
-flake8 = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
