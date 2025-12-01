@@ -11,39 +11,60 @@ jobs:
         python-version: ["3.11"]
 
     steps:
+      # Checkout the repo
       - uses: actions/checkout@v5
 
+      # Set up Python with pip caching
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
 
+      # Cache Poetry dependencies
+      - name: Cache Poetry and pip
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pypoetry
+            ~/.cache/pip
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      # Install Poetry
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           export PATH="$HOME/.local/bin:$PATH"
 
+      # Install project dependencies
       - name: Install dependencies
-        run: | 
+        run: |
           poetry install --with dev
           pip install -e .
 
+      # Set PYTHONPATH
       - name: Set PYTHONPATH
-        run: export PYTHONPATH="$PYTHONPATH:src"
+        run: echo "PYTHONPATH=$PYTHONPATH:src" >> $GITHUB_ENV
 
+      # Code formatting check
       - name: Check formatting (Black)
         run: poetry run black --check $(git ls-files '*.py') -v
 
+      # Import sorting check
       - name: Check imports (Isort)
         run: poetry run isort --check-only $(git ls-files '*.py') -v
 
+      # Type checking
       - name: Type checking (Mypy)
         run: poetry run mypy .
 
+      # Linting
       - name: Code linting (Pylint)
         run: poetry run pylint $(git ls-files '*.py') -v
 
+      # Run tests
       - name: Run tests (unittest)
         run: poetry run python -m unittest discover tests
