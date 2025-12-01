@@ -6,7 +6,7 @@ from os.path import basename, dirname, isdir, isfile, join
 def search_file(search_term: str) -> list[str]:
     """Search for files and directories matching the search term."""
 
-    files = list()
+    files: list[str] = []
 
     searching_dir = dirname(search_term)
     searching_file = basename(search_term)
@@ -46,6 +46,8 @@ def set_line_completer(*command_routes: str) -> None:
             case 2:
                 if commands[0] in command_routes:
                     return find_file(commands[1].strip(), state)
+            case _:
+                return None
 
         return None
 

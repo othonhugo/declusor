@@ -1,6 +1,6 @@
 import socket
 from contextlib import contextmanager
-from typing import Generator
+from typing import Generator, Type
 
 
 @contextmanager
@@ -16,20 +16,20 @@ def await_connection(host: str, port: int) -> Generator[socket.socket, None, Non
             with sock.accept()[0] as connection:
                 yield connection
         except Exception as err:
-            handle_socket_exception(err)
+            _handle_socket_exception(err)
 
 
-def handle_socket_exception(err: Exception) -> None:
+def _handle_socket_exception(err: Exception) -> None:
     """Handle socket-related exceptions and provide user-friendly error messages."""
 
-    exception_message_table = {
+    exception_message_table: dict[Type[BaseException], str] = {
         socket.gaierror: "invalid address/hostname.",
         OverflowError: "port must be 0-65535.",
         PermissionError: "permission denied.",
     }
 
     for exception_type, exception_message in exception_message_table.items():
-        if exception_type is type(err):
+        if isinstance(err, exception_type):
             raise SystemExit(exception_message)
 
-    raise err
+    raise err from err

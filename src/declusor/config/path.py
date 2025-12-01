@@ -1,10 +1,6 @@
 from pathlib import Path
 
-ROOT_DIR = Path(__file__).resolve()
-
-for _ in range(4):
-    ROOT_DIR = ROOT_DIR.parent
-
+ROOT_DIR = Path(__file__).resolve().parents[3]
 DATA_DIR = ROOT_DIR / "data"
 
 CLIENTS_DIR = DATA_DIR / "clients"

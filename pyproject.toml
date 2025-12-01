@@ -1,29 +1,75 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[project]
+[tool.poetry]
 name = "declusor"
-version = "2025.9.2"
 description = "declusor is a versatile payload delivery handler designed to manage the delivery of Bash script payloads to Linux machines."
-dependencies = []
-requires-python = ">=3.10"
+version = "0.2.0"
 readme = "README.md"
-license = {file = "LICENSE"}
-keywords = ["bash", "security", "post", "exploitation", "payload", "delivery", "infosec"]
+license = "LICENSE"
+authors = ["Othon Hugo <othonhugo@users.noreply.github.com>"]
+keywords = ["bash", "security", "post-exploitation", "payload-delivery", "infosec"]
 classifiers = ["Development Status :: 4 - Beta", "Programming Language :: Python :: 3.10"]
+packages = [{ include = "declusor", from = "src" }]
 
-[project.urls]
+[tool.poetry.urls]
 Homepage = "https://github.com/othonhugo/declusor/"
 Repository = "https://github.com/othonhugo/declusor.git"
 Issues = "https://github.com/othonhugo/declusor/issues"
 
-[project.optional-dependencies]
-lint = ["flake8"]
-dev = ["mypy"]
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+pylint = "^3.3.8"
+mypy = "^1.18.2"
+black = "^25.9.0"
+isort = "^6.1.0"
+hypothesis = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.main]
+source-roots = ["src"]
+max-line-length = 150
+recursive = true
+disable = [
+    "missing-module-docstring",
+    "too-few-public-methods",
+    "unused-argument",
+    "broad-exception-caught",
+]
+ignore-paths = [".venv/", "build/", "tests/"]
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+exclude = ["tests/*"]
+pretty = true
+strict = true
+disallow_any_expr = false
+disallow_any_unimported = false
+disallow_subclassing_any = false
 
 [tool.black]
-line-length = 79
+line-length = 150
+target-version = ["py311"]
+exclude = '''
+/(
+    \.git
+| \.venv
+| build
+| dist
+| migrations
+| .venv
+)/
+'''
 
 [tool.isort]
 profile = "black"
+line_length = 150
+
+[tool.pytest.ini_options]
+addopts = "-raqsv --strict-markers --tb=no"
+pythonpath = ["src"]
+testpaths = ["tests"]
+norecursedirs = [".vscode", "__pycache__"]

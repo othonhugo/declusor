@@ -1,0 +1,3 @@
+#!/bin/bash
+
+black $(git ls-files '*.py') -v

@@ -1,76 +1,113 @@
-from select import select
-from socket import socket
-from typing import Generator
+import asyncio
+from typing import AsyncGenerator
 
-from interface import ISession
-from util import load_library, write_warninig_message
+from declusor.interface import ISession
+from declusor.util import load_library, write_warning_message
 
 
 class Session(ISession):
-    bufsize = 64
+    """
+    Manages a session over an asyncio connection, handling reading and writing
+    of data with specific acknowledgement (ACK) protocols.
+    """
 
-    def __init__(
-        self, connection: socket, server_ack: bytes, client_ack: bytes
-    ) -> None:
+    DEFAULT_BUFSIZE = 4096
+    DEFAULT_TIMEOUT = 0.75
 
-        self.connection = connection
+    def __init__(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, server_ack: bytes, client_ack: bytes) -> None:
+        """
+        Initialize the Session.
+
+        Args:
+            reader: The asyncio StreamReader.
+            writer: The asyncio StreamWriter.
+            server_ack: The byte sequence expected from the server to signal end of message.
+            client_ack: The byte sequence sent to the client after writing data.
+            timeout: Socket timeout in seconds.
+        """
+
+        self.reader = reader
+        self.writer = writer
         self.server_ack = server_ack
         self.client_ack = client_ack
-        self.timeout = 0.75
 
-        self.write(load_library())
+        self._timeout = self.DEFAULT_TIMEOUT
 
-        if b"".join(self.read()):
-            write_warninig_message("the library import may have failed.")
+    async def initialize(self) -> None:
+        """Perform initial handshake/setup."""
 
-    def set_blocking(self, flag: bool) -> None:
-        self.connection.setblocking(flag)
+        try:
+            await self.write(load_library())
+            # Check for immediate response indicating failure
+            try:
+                # Wait for a short time to see if there's an error response
+                initial_data = await asyncio.wait_for(self.reader.read(self.DEFAULT_BUFSIZE), timeout=0.1)
+                if initial_data:
+                    write_warning_message("the library import may have failed.")
+            except asyncio.TimeoutError:
+                pass  # No data means likely success in this context
+        except Exception:
+            # Log or handle initialization errors if necessary
+            pass
 
     def set_timeout(self, value: float) -> None:
-        self.connection.settimeout(value)
+        """Set the timeout for socket operations."""
 
-    def read_all(self, bufsize: int = bufsize) -> Generator[bytes, None, None]:
-        """Read and yield all data until the connection is closed."""
+        self._timeout = value
 
-        while True:
-            readable = select([self.connection], [], [], self.timeout)[0]
+    def read(self) -> AsyncGenerator[bytes, None]:
+        """
+        Read data from the connection until the server ACK is received.
+        Yields chunks of data as they arrive, excluding the ACK.
+        """
 
-            if not readable:
-                yield b""
+        async def _read_generator() -> AsyncGenerator[bytes, None]:
+            buffer = bytearray()
+            ack_len = len(self.server_ack)
 
-            for _ in readable:
-                if data := self.connection.recv(bufsize):
-                    yield data
-                else:
-                    raise ConnectionResetError
+            while True:
+                try:
+                    # Use wait_for to implement timeout
+                    chunk = await asyncio.wait_for(self.reader.read(self.DEFAULT_BUFSIZE), timeout=self._timeout)
 
-    def read(self) -> Generator[bytes, None, None]:
-        """Read and yield data until the server ACK is received."""
+                    if not chunk:
+                        raise ConnectionResetError("Connection closed by peer")
 
-        buffer = b""
+                    buffer.extend(chunk)
 
-        for data in self.read_all():
-            # append data to a reduced size buffer
-            buffer = buffer[len(buffer) - len(self.server_ack):] + data
+                    # Check if ACK is present in the buffer
+                    search_start = max(0, len(buffer) - len(chunk) - ack_len)
+                    ack_index = buffer.find(self.server_ack, search_start)
 
-            # assign the index value of where the ACK could be
-            ack_index = len(buffer) - len(self.server_ack)
+                    if ack_index != -1:
+                        # ACK found. Yield data up to ACK and stop.
+                        yield bytes(buffer[:ack_index])
+                        break
 
-            # check if the ACK reply was received
-            if flag := buffer[ack_index:] == self.server_ack:
-                # assign the index value of where the data is stored
-                buffer_data_index = len(buffer) - len(data)
+                    # If buffer is larger than ACK length, we can safely yield the beginning
+                    if len(buffer) > ack_len:
+                        safe_len = len(buffer) - ack_len
 
-                # reassign data value without ACK response
-                data = buffer[buffer_data_index: -len(self.server_ack)]
+                        yield bytes(buffer[:safe_len])
+                        del buffer[:safe_len]
 
-            yield data
+                except asyncio.TimeoutError:
+                    continue
 
-            if flag:
-                break
+        return _read_generator()
 
-    def write(self, content: bytes) -> None:
-        """Write/send data to session connection."""
+    async def write(self, content: bytes) -> None:
+        """
+        Write data to the connection followed by the client ACK.
 
-        self.connection.send(content)
-        self.connection.send(self.client_ack)
+        Args:
+            content: The bytes to send.
+        """
+
+        try:
+            payload = content + self.client_ack
+            self.writer.write(payload)
+
+            await self.writer.drain()
+        except OSError as e:
+            raise ConnectionError(f"Failed to write to connection: {e}") from e

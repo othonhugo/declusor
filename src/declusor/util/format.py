@@ -1,7 +1,7 @@
 from os.path import join
 from string import Template
 
-from config import CLIENTS_DIR, DEFAULT_SRV_ACK
+from declusor.config import CLIENTS_DIR, DEFAULT_SRV_ACK
 
 
 def convert_bytes_to_hex(data: bytes) -> str:
@@ -13,14 +13,14 @@ def convert_bytes_to_hex(data: bytes) -> str:
 def format_client_bash_code(filepath: str, **kwargs: str | int) -> str:
     """Formats client code by reading a file, removing comments, and substituting variables."""
 
-    client_code = str()
+    client_code = ""
 
-    with open(join(CLIENTS_DIR, filepath), "r") as f:
+    with open(join(CLIENTS_DIR, filepath), "r", encoding="utf-8") as f:
         for line in f.readlines():
             if not line.lstrip().startswith("#"):
                 client_code += line
 
-    kwargs.update(dict(acknowledge=convert_bytes_to_hex(DEFAULT_SRV_ACK)))
+    kwargs.update({"acknowledge": convert_bytes_to_hex(DEFAULT_SRV_ACK)})
 
     client_code = " ".join(client_code.split())
     client_code = Template(client_code).safe_substitute(**format_bash_arguments(**kwargs))
@@ -49,7 +49,7 @@ def escape_double_quotes(value: str) -> str:
 def format_bash_function_call(function: str, *args: str, use_double_quotes: bool = False) -> str:
     """Formats a Bash function call with properly escaped arguments."""
 
-    escaped_args = []
+    escaped_args: list[str] = []
 
     for arg in args:
         if use_double_quotes:

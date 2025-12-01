@@ -1,11 +1,11 @@
+import asyncio
 from os import chdir
 from os.path import exists, isdir
 
-import config
-import controller
-from core import PromptCLI, Router, Session
-from util import await_connection, format_client_bash_code
-from interface import IRouter
+from declusor import config, controller
+from declusor.core import PromptCLI, Router, Session
+from declusor.interface import IRouter
+from declusor.util import format_client_bash_code
 
 
 def set_routes(router: IRouter) -> None:
@@ -20,7 +20,7 @@ def set_routes(router: IRouter) -> None:
     router.connect("exit", controller.call_exit)
 
 
-def run_service(host: str, port: int, client: str) -> None:
+async def run_service(host: str, port: int, client: str) -> None:
     """Run the main service loop."""
 
     directories = [config.CLIENTS_DIR, config.SCRIPTS_DIR, config.LIBRARY_DIR]
@@ -39,8 +39,25 @@ def run_service(host: str, port: int, client: str) -> None:
 
     print(format_client_bash_code(client, HOST=host, PORT=port))
 
-    with await_connection(host, port) as connection:
-        session = Session(connection, config.DEFAULT_SRV_ACK, config.DEFAULT_CLT_ACK)
+    first_session_future: asyncio.Future[Session] = asyncio.Future()
+
+    async def client_handler(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
+        session = Session(reader, writer, config.DEFAULT_SRV_ACK, config.DEFAULT_CLT_ACK)
+        await session.initialize()
+
+        if not first_session_future.done():
+            first_session_future.set_result(session)
+
+        try:
+            await session.writer.wait_closed()
+        except Exception:
+            pass
+
+    server = await asyncio.start_server(client_handler, host, port)
+
+    async with server:
+        # Wait for the first session to connect
+        session = await first_session_future
 
         prompt = PromptCLI(router, session)
-        prompt.run()
+        await prompt.run()
