@@ -7,7 +7,7 @@ Its command-line interface significantly enhances productivity through intellige
 [![asciicast](https://asciinema.org/a/zCmZ28Nyzw75buWlBl8SZf2Vq.svg)](https://asciinema.org/a/zCmZ28Nyzw75buWlBl8SZf2Vq)
 
 > [!WARNING]
-> **Legal Notice**: This software is strictly intended for educational purposes and authorized security research. The developers decline any responsibility arising from the misuse of this tool. The execution of LibreControl is prohibited on networks or systems for which the operator does not hold ownership or explicit and documented authorization for penetration testing.
+> **Legal Notice**: This software is strictly intended for educational purposes and authorized security research. The developers decline any responsibility arising from the misuse of this tool. The execution of Declusor is prohibited on networks or systems for which the operator does not hold ownership or explicit and documented authorization for penetration testing.
 
 ## Features
 
