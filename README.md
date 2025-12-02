@@ -1,10 +1,13 @@
 # Declusor: A Python-Based Reverse Shell Client
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Python 3.x](https://img.shields.io/badge/python-3.x-blue.svg)
+
 Declusor is an extremely effective and flexible tool written in Python, designed with a modular architecture that allows its components to be easily customized. It's a valuable tool for penetration testers, CTF enthusiasts, and cybersecurity professionals, offering streamlined payload delivery and reliable remote control.
 
 Its command-line interface significantly enhances productivity through intelligent command and file path completion, ensuring reliability and precision in remote operations.
 
-[![asciicast](https://asciinema.org/a/zCmZ28Nyzw75buWlBl8SZf2Vq.svg)](https://asciinema.org/a/zCmZ28Nyzw75buWlBl8SZf2Vq)
+[![asciicast](https://asciinema.org/a/VdFuA3q0fiG64sh2TadaGBspe.svg)](https://asciinema.org/a/VdFuA3q0fiG64sh2TadaGBspe)
 
 > [!WARNING]
 > **Legal Notice**: This software is strictly intended for educational purposes and authorized security research. The developers decline any responsibility arising from the misuse of this tool. The execution of Declusor is prohibited on networks or systems for which the operator does not hold ownership or explicit and documented authorization for penetration testing.
@@ -20,18 +23,19 @@ Its command-line interface significantly enhances productivity through intellige
 
 ## Technical Architecture
 
-Declusor is built with a modular design focusing on reliability and maintainability:
+Declusor is built with a modular design focusing on reliability and maintainability, structured around key components:
 
-- **Core**: Robust session management using blocking sockets with optimized buffering (`bytearray`) for high‑performance data handling.
-- **Controller**: Modular command handlers (`load`, `upload`, `shell`, etc.) allowing easy extension of functionality.
-- **Interface**: Abstract base classes defining clear contracts for components.
+- **Connection Management**: Handles the underlying network communication and data transfer between the client and target, ensuring robust session stability.
+- **Command Processing**: Interprets user commands and dispatches them to specialized modules for execution, enabling diverse remote operations.
+- **Module System**: Provides a flexible and extensible framework for integrating new functionalities and commands, enhancing Declusor's adaptability.
+- **User Interface**: Manages the interactive command-line experience, including intelligent command and file path completion for improved usability.
 
 ## Getting Started
 
 ### Prerequisites
 
-* **Python 3.x**: Ensure you have Python 3 installed on your local machine.
-* **Unix‑like Operating System**: Declusor relies on some features which are standard on Linux, macOS, and other Unix‑like systems.
+- **Python 3.x**: Ensure you have Python 3 installed on your local machine.
+- **Unix‑like Operating System (Target)**: Declusor relies on some features which are standard on Linux, macOS, and other Unix‑like systems on the target machine.
 
 ### Installation
 
@@ -51,6 +55,7 @@ No additional Python packages are required beyond the standard library.
 # Start the listener (replace IP and PORT as needed)
 ./declusor 127.0.0.1 4444
 ```
+
 The client will output a Bash one‑liner. Execute that one‑liner on the target machine to establish the reverse shell.
 
 ## Usage
@@ -59,16 +64,17 @@ The client will output a Bash one‑liner. Execute that one‑liner on the targe
 
 Run the script with the desired IP and port:
 
-```bash
+```
 ./declusor <LISTENER_IP> <LISTENER_PORT>
 ```
 
 **Example:**
 
 ```bash
-$ ./declusor 127.0.0.1 4444
+./declusor 127.0.0.1 4444
 ```
-After running, Declusor prints a Bash one‑liner for the target.
+
+After starting the listener, Declusor prints a Bash one‑liner. This command needs to be executed on the target machine to establish the reverse shell connection back to the Declusor client.
 
 ### Establishing the Reverse Shell (Target Machine)
 
@@ -80,7 +86,7 @@ Copy the printed one‑liner and run it on the target machine:
 
 ### Interacting with the Target
 
-When the reverse shell is active, Declusor shows a `[declusor]` prompt. Available commands:
+When the reverse shell is active, Declusor shows a `[declusor]` prompt.
 
 ```
 [declusor] help
@@ -112,14 +118,17 @@ To fully leverage `declusor`, you can create custom payloads or modify the exist
 
 ## Contributing
 
-Contributions are welcome! This is an educational project, so clarity and correctness are prioritized over performance optimizations.
+Contributions are highly encouraged and welcome! We prioritize clarity, correctness, and modularity in the codebase.
 
-**Areas for contribution:**
-- Additional usage examples
-- Documentation improvements
-- Test coverage expansion
-- Bug fixes
-- Code clarity improvements
+**Areas for contribution include:**
+
+- **New Command Handlers**: Extend Declusor's functionality by adding new commands (e.g., for specific reconnaissance, privilege escalation, or post-exploitation tasks).
+- **Payload Development**: Create new scripts for the `data/lib/` (persistent subroutines) or `data/scripts/` (on-demand execution) directories.
+- **Cross-Platform Compatibility**: Enhance support for different operating systems, especially for the target-side one-liner or client-side execution.
+- **Documentation & Examples**: Improve existing documentation, add more detailed usage examples, or create tutorials.
+- **Bug Fixes & Robustness**: Identify and fix bugs, improve error handling, or enhance the stability of network communications.
+- **Code Refactoring & Clarity**: Improve code readability, maintainability, and adherence to best practices.
+- **Test Coverage**: Expand unit and integration tests to ensure reliability.
 
 ## License
 
