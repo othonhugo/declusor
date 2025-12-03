@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 
 from declusor.config import InvalidArgument
-from declusor.util.file import load_file, load_library, load_payload
+from declusor.util.filesystem import load_file, load_library, load_payload
 
 
 class TestFilesystemIntegration(unittest.TestCase):
