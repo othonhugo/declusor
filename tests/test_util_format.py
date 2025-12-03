@@ -1,6 +1,6 @@
 import unittest
 
-from declusor.util.format import convert_bytes_to_hex, escape_double_quotes, escape_single_quotes, format_bash_arguments, format_bash_function_call
+from declusor.util.encoding import convert_bytes_to_hex, escape_double_quotes, escape_single_quotes, format_bash_arguments, format_bash_function_call
 
 
 class TestFormatUtil(unittest.TestCase):

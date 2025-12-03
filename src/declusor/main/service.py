@@ -5,7 +5,7 @@ from os.path import exists, isdir
 from declusor import config, controller
 from declusor.core import PromptCLI, Router, Session
 from declusor.interface import IRouter
-from declusor.util import format_client_bash_code
+from declusor.util import format_client_script
 
 
 def set_routes(router: IRouter) -> None:
@@ -37,12 +37,12 @@ async def run_service(host: str, port: int, client: str) -> None:
     chdir(config.SCRIPTS_DIR)
     config.set_line_completer(*router.routes)
 
-    print(format_client_bash_code(client, HOST=host, PORT=port))
+    print(format_client_script(client, HOST=host, PORT=port))
 
     first_session_future: asyncio.Future[Session] = asyncio.Future()
 
     async def client_handler(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
-        session = Session(reader, writer, config.DEFAULT_SRV_ACK, config.DEFAULT_CLT_ACK)
+        session = Session(reader, writer, config.DEFAULT_ACK_VALUE, config.DEFAULT_CLT_ACK)
         await session.initialize()
 
         if not first_session_future.done():

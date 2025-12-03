@@ -5,7 +5,7 @@ from declusor.util import format_bash_function_call, load_file_safely, parse_com
 
 
 async def call_upload(session: ISession, router: IRouter, line: str) -> None:
-    """Uploads a file to the target machine."""
+    """Upload a file to the target machine."""
 
     arguments, _ = parse_command_arguments(line, {"filepath": str})
 
