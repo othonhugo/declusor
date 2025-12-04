@@ -1,12 +1,21 @@
-from string import Template
 from shlex import quote
+from string import Template
 
 from declusor import config
 from declusor.util import encoding
 
 
 def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
-    """Read a client script from the default clients directory, substitute variables, and format it for use."""
+    """
+    Read a client script from the default clients directory, substitute variables, and format it for use.
+
+    Args:
+        client_name: The name of the client script file to read.
+        **kwargs: Key-value pairs to substitute into the client script template.
+
+    Returns:
+        The formatted client script with variables substituted.
+    """
 
     client_filepath = (config.CLIENTS_DIR / client_name).resolve()
 
@@ -21,7 +30,20 @@ def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
 
 
 def format_function_call(function_name: str, language: str, /, *args: str) -> str:
-    """Formats a function call with properly escaped arguments."""
+    """
+    Format a function call with properly escaped arguments.
+
+    Args:
+        function_name: The name of the function to call.
+        language: The programming language of the function (e.g., 'bash', 'sh').
+        *args: Variable length argument list to pass to the function.
+
+    Returns:
+        The formatted function call string.
+
+    Raises:
+        InvalidOperation: If the specified language is not supported.
+    """
 
     match language.lower():
         case "bash" | "sh":
@@ -31,7 +53,16 @@ def format_function_call(function_name: str, language: str, /, *args: str) -> st
 
 
 def _format_bash_function_call(function_name: str, /, *args: str) -> str:
-    """Formats a Bash function call with properly escaped arguments."""
+    """
+    Format a Bash function call with properly escaped arguments.
+
+    Args:
+        function_name: The name of the Bash function.
+        *args: Variable length argument list to pass to the function.
+
+    Returns:
+        The formatted Bash function call string.
+    """
 
     template = Template("$function_name $quoted_args")
 

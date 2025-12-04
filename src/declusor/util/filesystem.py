@@ -5,7 +5,18 @@ from declusor.util import sanitize
 
 
 def load_file(filepath: str | Path) -> bytes:
-    """Read a file from the filesystem."""
+    """
+    Read a file from the filesystem.
+
+    Args:
+        filepath: The path to the file to read.
+
+    Returns:
+        The content of the file as bytes.
+
+    Raises:
+        InvalidOperation: If the file does not exist, is not a file, or cannot be read.
+    """
 
     filepath = Path(filepath).resolve()
 
@@ -23,7 +34,18 @@ def load_file(filepath: str | Path) -> bytes:
 
 
 def load_payload(module_filename: str) -> bytes:
-    """Load a payload script from the default scripts directory."""
+    """
+    Load a payload script from the default scripts directory.
+
+    Args:
+        module_filename: The name of the payload script file.
+
+    Returns:
+        The content of the payload script as bytes.
+
+    Raises:
+        InvalidOperation: If the file extension is not supported or the file is outside the scripts directory.
+    """
 
     module_filepath = (config.SCRIPTS_DIR / module_filename).resolve()
 
@@ -37,7 +59,12 @@ def load_payload(module_filename: str) -> bytes:
 
 
 def load_library() -> bytes:
-    """Load all library scripts from the default library directory."""
+    """
+    Load all library scripts from the default library directory.
+
+    Returns:
+        The concatenated content of all library scripts as bytes.
+    """
 
     modules: list[bytes] = []
 

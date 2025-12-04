@@ -1,6 +1,6 @@
-from typing import Any, Mapping, Type
-from argparse import ArgumentParser
 import shlex
+from argparse import ArgumentParser
+from typing import Any, Mapping, Type
 
 from declusor import config
 
@@ -24,6 +24,9 @@ def parse_command_arguments(line: str, definitions: ArgumentDefinitions, allow_u
         A tuple containing:
             - dict of parsed arguments
             - list of unknown arguments (if allow_unknown=True)
+
+    Raises:
+        InvalidOperation: If an argument type is not supported or if there is a parsing error.
     """
 
     if not definitions and not line.strip():
@@ -48,9 +51,9 @@ def parse_command_arguments(line: str, definitions: ArgumentDefinitions, allow_u
         namespace = parser.parse_args(args_list)
         unrecognized_args = []
 
-    parsed: dict[str, Any] = {}
+    parsed_args: dict[str, Any] = {}
 
     for k, v in vars(namespace).items():
-        parsed[k] = v
+        parsed_args[k] = v
 
-    return parsed, unrecognized_args
+    return parsed_args, unrecognized_args
