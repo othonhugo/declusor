@@ -1,14 +1,14 @@
 from pathlib import Path
 
-from declusor import enums, interface, util
+from declusor import config, interface, util
 
 
 class _BaseFileCommand(interface.ICommand):
     """Base command for file operations (execution or upload)."""
 
-    FUNC_NAME: enums.FileFunc = NotImplemented
+    FUNC_NAME: config.FileFunc = NotImplemented
 
-    def __init__(self, filepath: str | Path, language: enums.Language = enums.Language.BASH) -> None:
+    def __init__(self, filepath: str | Path, language: config.Language = config.Language.BASH) -> None:
         """
         Initialize the file command.
 
@@ -48,10 +48,10 @@ class _BaseFileCommand(interface.ICommand):
 class ExecuteFile(_BaseFileCommand):
     """Command to execute a file on the target machine."""
 
-    FUNC_NAME = enums.FileFunc.EXEC_FILE
+    FUNC_NAME = config.FileFunc.EXEC_FILE
 
 
 class UploadFile(_BaseFileCommand):
     """Command to upload a file to the target machine."""
 
-    FUNC_NAME = enums.FileFunc.STORE_FILE
+    FUNC_NAME = config.FileFunc.STORE_FILE
