@@ -1,12 +1,12 @@
-from declusor import schema, interface, util
+from declusor import enum, interface, util
 
 from pathlib import Path
 
 
 class UploadFile(interface.ICommand):
-    _FUNCTION_NAME = schema.STORE_FILE_FUNCTION
+    _FUNCTION_NAME = enum.STORE_FILE_FUNCTION
 
-    def __init__(self, filepath: str | Path, language: str = "bash") -> None:
+    def __init__(self, filepath: str | Path, language: enum.Language = "bash") -> None:
         self._filepath = util.ensure_file_exists(filepath)
         self._language = language
 
@@ -18,4 +18,4 @@ class UploadFile(interface.ICommand):
         file_content = util.load_file(self._filepath)
         file_base64 = util.convert_to_base64(file_content)
 
-        return util.format_function_call(self._language, schema.STORE_FILE_FUNCTION, file_base64).encode()
+        return util.format_function_call(self._language, self._FUNCTION_NAME, file_base64).encode()

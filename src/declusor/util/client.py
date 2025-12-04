@@ -1,7 +1,7 @@
 from shlex import quote
 from string import Template
 
-from declusor import config, error
+from declusor import config, error, enum
 from declusor.util import encoding
 
 
@@ -29,7 +29,7 @@ def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
     return client_template.safe_substitute(**kwargs)
 
 
-def format_function_call(language: str, /, function_name: str, *args: str) -> str:
+def format_function_call(language: enum.Language, /, function_name: str, *args: str) -> str:
     """
     Format a function call with properly escaped arguments.
 
