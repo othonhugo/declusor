@@ -1,0 +1,21 @@
+from declusor import enum, interface, util
+
+from pathlib import Path
+
+
+class ExecuteFile(interface.ICommand):
+    _FUNCTION_NAME = enum.EXECUTE_FILE_FUNCTION
+
+    def __init__(self, filepath: str | Path, language: enum.Language = enum.Language.BASH) -> None:
+        self._filepath = util.ensure_file_exists(filepath)
+        self._language = language
+
+    async def execute(self, session: interface.ISession, /) -> None:
+        await session.write(self._command)
+
+    @property
+    def _command(self) -> bytes:
+        file_content = util.load_file(self._filepath)
+        file_base64 = util.convert_to_base64(file_content)
+
+        return util.format_function_call(self._language, self._FUNCTION_NAME, file_base64).encode()
