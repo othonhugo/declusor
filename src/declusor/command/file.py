@@ -6,7 +6,7 @@ from declusor import enums, interface, util
 class _BaseFileCommand(interface.ICommand):
     """Base command for file operations (execution or upload)."""
 
-    _FUNC_NAME: enums.FileFunc = NotImplemented
+    FUNC_NAME: enums.FileFunc = NotImplemented
 
     def __init__(self, filepath: str | Path, language: enums.Language = enums.Language.BASH) -> None:
         """
@@ -42,16 +42,16 @@ class _BaseFileCommand(interface.ICommand):
         file_content = util.load_file(self._filepath)
         file_base64 = util.convert_to_base64(file_content)
 
-        return util.format_function_call(self._language, self._FUNC_NAME, file_base64).encode()
+        return util.format_function_call(self._language, self.FUNC_NAME, file_base64).encode()
 
 
-class ExecuteFile(_BaseFileCommand, interface.ICommand):
+class ExecuteFile(_BaseFileCommand):
     """Command to execute a file on the target machine."""
 
-    _FUNC_NAME = enums.FileFunc.EXEC_FILE
+    FUNC_NAME = enums.FileFunc.EXEC_FILE
 
 
-class UploadFile(_BaseFileCommand, interface.ICommand):
+class UploadFile(_BaseFileCommand):
     """Command to upload a file to the target machine."""
 
-    _FUNCTION_NAME = enums.FileFunc.STORE_FILE
+    FUNC_NAME = enums.FileFunc.STORE_FILE
