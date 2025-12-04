@@ -4,7 +4,7 @@ from declusor import interface, util
 
 
 async def call_help(session: interface.ISession, router: interface.IRouter, line: str) -> None:
-    """Display help information about available commands."""
+    """Display detailed information about available commands or a specific command."""
 
     arguments, _ = util.parse_command_arguments(line, {"command": Optional[str]})
 

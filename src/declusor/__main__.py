@@ -1,13 +1,13 @@
 import asyncio
 
-from declusor.core import DeclusorParser
-from declusor.main import handle_exception, run_service
-from declusor.version import PROJECT_DESCRIPTION, PROJECT_NAME, __version__
+from declusor import core, main, version
 
 if __name__ == "__main__":
-    opt = DeclusorParser(PROJECT_NAME, PROJECT_DESCRIPTION, __version__).parse()
+    opt = core.DeclusorParser(version.PROJECT_NAME, version.PROJECT_DESCRIPTION, version.__version__).parse()
 
     try:
-        asyncio.run(run_service(opt["host"], opt["port"], opt["client"]))
-    except (Exception, KeyboardInterrupt) as err:
-        handle_exception(err)
+        asyncio.run(main.run_service(opt["host"], opt["port"], opt["client"]))
+    except Exception as e:
+        main.handle_exception(e)
+    except KeyboardInterrupt:
+        pass

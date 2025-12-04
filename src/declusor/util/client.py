@@ -4,9 +4,6 @@ from string import Template
 from declusor import config, enums, error
 from declusor.util import encoding
 
-_SupportedLanguages = enums.Language
-_SupportedFunctions = enums.FileFunc
-
 
 def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
     """
@@ -32,7 +29,7 @@ def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
     return client_template.safe_substitute(**kwargs)
 
 
-def format_function_call(language: _SupportedLanguages, /, function_name: _SupportedFunctions, *args: str) -> str:
+def format_function_call(language: enums.Language, /, function_name: enums.FileFunc, *args: str) -> str:
     """
     Format a function call with properly escaped arguments.
 
@@ -48,8 +45,8 @@ def format_function_call(language: _SupportedLanguages, /, function_name: _Suppo
         InvalidOperation: If the specified language is not supported.
     """
 
-    match language.value.lower():
-        case "bash" | "sh":
+    match language:
+        case enums.Language.BASH | enums.Language.SH:
             return _format_bash_function_call(function_name.value, *args)
         case _:
             raise error.InvalidOperation(f"Unsupported language: {language}")
@@ -69,4 +66,7 @@ def _format_bash_function_call(function_name: str, /, *args: str) -> str:
 
     template = Template("$function_name $quoted_args")
 
-    return template.safe_substitute(function_name=function_name, quoted_args=" ".join(quote(arg) for arg in args))
+    return template.safe_substitute(
+        function_name=function_name,
+        quoted_args=" ".join(quote(arg) for arg in args),
+    )

@@ -7,8 +7,6 @@ def handle_exception(err: BaseException) -> None:
     handler_table: dict[Type[BaseException], Callable[[BaseException], str]] = {
         FileNotFoundError: lambda e: f"file or directory not found: {e}",
         NotADirectoryError: lambda e: f"not a directory: {e}",
-        KeyboardInterrupt: lambda e: "",
-        SystemExit: str,
         OSError: str,
     }
 

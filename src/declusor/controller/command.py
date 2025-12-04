@@ -2,7 +2,7 @@ from declusor import command, interface, util
 
 
 async def call_command(session: interface.ISession, router: interface.IRouter, line: str) -> None:
-    """Execute a command on the remote system."""
+    """Execute a single command on the remote system."""
 
     arguments, _ = util.parse_command_arguments(line, {"command": str})
     command_line = arguments["command"]
