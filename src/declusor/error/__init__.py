@@ -1,4 +1,4 @@
-from .exceptions import ControllerError, DeclusorException, InvalidOperation, ParserError, PromptError, RouterError
+from .exceptions import ControllerError, DeclusorException, InvalidOperation, ParserError, PromptError, RouterError, ExitRequest
 
 __all__ = [
     "ParserError",
@@ -7,4 +7,5 @@ __all__ = [
     "PromptError",
     "InvalidOperation",
     "RouterError",
+    "ExitRequest",
 ]

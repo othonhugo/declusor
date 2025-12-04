@@ -37,5 +37,9 @@ class PromptCLI(interface.IPrompt):
         while True:
             try:
                 await self.handle_route(await self.read_command())
+            except error.ExitRequest:
+                break
+            except KeyboardInterrupt:
+                break
             except error.DeclusorException as err:
                 util.write_error_message(str(err))
