@@ -28,3 +28,15 @@ def test_parse_command_arguments_allow_unknown() -> None:
 
 def test_parse_command_arguments_disallow_unknown() -> None:
     """Test parsing with `allow_unknown=False`."""
+
+
+def test_parse_command_arguments_optional_provided() -> None:
+    """Test parsing when an optional argument is provided."""
+
+
+def test_parse_command_arguments_optional_missing() -> None:
+    """Test parsing when an optional argument is omitted."""
+
+
+def test_parse_command_arguments_custom_parser_error() -> None:
+    """Test that the custom parser raises ParserError on invalid input."""

@@ -1,14 +1,56 @@
 import shlex
-from argparse import ArgumentParser
-from typing import Any, Mapping, Type
+from argparse import ArgumentParser, HelpFormatter
+from typing import Any, Mapping, Type, get_origin, get_args, Union, NoReturn, Callable
 
 from declusor import error
 
-ArgumentDefinitions = Mapping[str, Type[Any]]
+ArgumentDefinitions = Mapping[str, Type[Any] | Union[Any]]
 """The definitions: `argument name` -> `expected type`"""
 
 ParsedArguments = dict[str, Any]
 """The parsed result: `argument name` -> `actual value`"""
+
+
+class Parser(ArgumentParser):
+    """Custom argument parser that extends argparse.ArgumentParser."""
+
+    def __init__(
+        self,
+        /,
+        prog: str | None = None,
+        usage: str | None = None,
+        description: str | None = None,
+        epilog: str | None = None,
+        prefix_chars: str = "-",
+        argument_default: Any = None,
+        add_help: bool = True,
+    ) -> None:
+        formatter_class = self.get_formatter_class()
+
+        super().__init__(
+            prog=prog,
+            usage=usage,
+            description=description,
+            epilog=epilog,
+            formatter_class=formatter_class,
+            prefix_chars=prefix_chars,
+            argument_default=argument_default,
+            add_help=add_help,
+        )
+
+    def error(self, message: str) -> NoReturn:
+        """Overrides the default ArgumentParser error behavior."""
+
+        raise error.ParserError(message)
+
+    def get_formatter_class(self) -> Callable[..., HelpFormatter]:
+        """Subclasses can override this to customize help formatting."""
+
+        return self._default_formatter_factory
+
+    @staticmethod
+    def _default_formatter_factory(*, prog: str) -> HelpFormatter:
+        return HelpFormatter(prog, max_help_position=30)
 
 
 def parse_command_arguments(line: str, definitions: ArgumentDefinitions, allow_unknown: bool = False) -> tuple[ParsedArguments, list[str]]:
@@ -29,16 +71,34 @@ def parse_command_arguments(line: str, definitions: ArgumentDefinitions, allow_u
         InvalidOperation: If an argument type is not supported or if there is a parsing error.
     """
 
+    SUPPORTED_TYPES: set[Type[Any]] = {str, int}
+
     if not definitions and not line.strip():
         return {}, []
 
-    parser = ArgumentParser(add_help=False, exit_on_error=False)
+    parser = Parser(add_help=False)
 
     for arg_name, arg_type in definitions.items():
-        if arg_type not in {str, int}:
+        origin, is_optional = get_origin(arg_type), False
+
+        if origin is Union:
+            origin_types = get_args(arg_type)
+
+            if type(None) in origin_types:
+                is_optional = True
+
+                if actual_types := [a for a in origin_types if a is not type(None)]:
+                    arg_type = actual_types[0]
+
+        if arg_type not in SUPPORTED_TYPES:
             raise error.InvalidOperation(f"Argument type {arg_type!r} for {arg_name!r} is not supported.")
 
-        parser.add_argument(arg_name, type=arg_type)
+        kwargs: dict[str, Any] = {"type": arg_type}
+
+        if is_optional:
+            kwargs["nargs"] = "?"
+
+        parser.add_argument(arg_name, **kwargs)
 
     try:
         args_list = shlex.split(line)
