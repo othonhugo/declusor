@@ -9,7 +9,7 @@ class ICommand(ABC):
     """Command interface."""
 
     @abstractmethod
-    async def send(self, session: "ISession") -> None:
+    async def execute(self, session: "ISession") -> None:
         """Send the command to the supplied session."""
 
         raise NotImplementedError

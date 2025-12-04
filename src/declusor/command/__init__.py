@@ -1,5 +1,5 @@
-from .upload import StoreFile
+from .upload import UploadFile
 
 __all__ = [
-    "StoreFile",
+    "UploadFile",
 ]
