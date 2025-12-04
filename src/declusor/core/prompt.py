@@ -1,5 +1,3 @@
-import asyncio
-
 from declusor import error, interface, util
 
 
@@ -15,7 +13,7 @@ class PromptCLI(interface.IPrompt):
     async def read_command(self) -> str:
         """Read command from user input."""
 
-        while not (command := await asyncio.to_thread(util.read_stripped_message, self._prompt)):
+        while not (command := await util.read_stripped_line_async(self._prompt)):
             continue
 
         return command
@@ -37,5 +35,7 @@ class PromptCLI(interface.IPrompt):
         while True:
             try:
                 await self.handle_route(await self.read_command())
-            except error.DeclusorException as err:
-                util.write_error_message(str(err))
+            except (error.ExitRequest, KeyboardInterrupt):
+                break
+            except error.DeclusorException as e:
+                util.write_error_message(str(e))

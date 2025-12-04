@@ -42,3 +42,7 @@ class ControllerError(DeclusorException):
         self.description = description
 
         super().__init__(f"controller error: {self.description}")
+
+
+class ExitRequest(DeclusorException):
+    """Request to exit the application."""

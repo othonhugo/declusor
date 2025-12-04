@@ -34,11 +34,12 @@ source-roots = ["src"]
 max-line-length = 150
 recursive = true
 disable = [
+    "broad-exception-caught",
     "missing-module-docstring",
     "too-few-public-methods",
-    "unused-argument",
-    "broad-exception-caught",
-    "too-many-arguments"
+    "too-many-arguments",
+    "too-many-locals",
+    "unused-argument"
 ]
 ignore-paths = [".venv/", "build/", "tests/"]
 

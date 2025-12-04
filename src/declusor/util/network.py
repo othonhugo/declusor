@@ -27,8 +27,8 @@ def await_connection(host: str, port: int) -> Generator[socket.socket, None, Non
 
             with sock.accept()[0] as connection:
                 yield connection
-        except Exception as err:
-            _handle_socket_exception(err)
+        except Exception as e:
+            _handle_socket_exception(e)
 
 
 def _handle_socket_exception(err: Exception) -> None:

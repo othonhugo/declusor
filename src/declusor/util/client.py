@@ -1,7 +1,7 @@
 from shlex import quote
 from string import Template
 
-from declusor import config, error
+from declusor import config, enums, error
 from declusor.util import encoding
 
 
@@ -29,7 +29,7 @@ def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
     return client_template.safe_substitute(**kwargs)
 
 
-def format_function_call(language: str, /, function_name: str, *args: str) -> str:
+def format_function_call(language: enums.Language, /, function_name: enums.FileFunc, *args: str) -> str:
     """
     Format a function call with properly escaped arguments.
 
@@ -45,9 +45,9 @@ def format_function_call(language: str, /, function_name: str, *args: str) -> st
         InvalidOperation: If the specified language is not supported.
     """
 
-    match language.lower():
-        case "bash" | "sh":
-            return _format_bash_function_call(function_name, *args)
+    match language:
+        case enums.Language.BASH | enums.Language.SH:
+            return _format_bash_function_call(function_name.value, *args)
         case _:
             raise error.InvalidOperation(f"Unsupported language: {language}")
 
@@ -66,4 +66,7 @@ def _format_bash_function_call(function_name: str, /, *args: str) -> str:
 
     template = Template("$function_name $quoted_args")
 
-    return template.safe_substitute(function_name=function_name, quoted_args=" ".join(quote(arg) for arg in args))
+    return template.safe_substitute(
+        function_name=function_name,
+        quoted_args=" ".join(quote(arg) for arg in args),
+    )

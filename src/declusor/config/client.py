@@ -1,3 +1,3 @@
-DEFAULT_CLIENT = "bash.sh"
+DEFAULT_CLIENT = "reverse_bash.sh"
 DEFAULT_ACK_PLACEHOLDER = "ACKNOWLEDGE"
 DEFAULT_ACK_VALUE = b"\xba\xdc\x00\xff\xee"

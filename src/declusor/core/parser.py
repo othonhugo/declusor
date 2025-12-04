@@ -1,10 +1,7 @@
-from argparse import ArgumentParser, HelpFormatter
-from typing import NoReturn
-
-from declusor import config, error, interface
+from declusor import config, error, interface, util
 
 
-class DeclusorParser(ArgumentParser):
+class DeclusorParser(util.Parser):
     """Parser for command-line arguments."""
 
     info = {
@@ -15,7 +12,7 @@ class DeclusorParser(ArgumentParser):
     }
 
     def __init__(self, prog: str, description: str, version: str) -> None:
-        super().__init__(prog=prog, description=description, formatter_class=self._create_formatter)
+        super().__init__(prog=prog, description=description)
 
         self._version = version
 
@@ -32,12 +29,3 @@ class DeclusorParser(ArgumentParser):
             return interface.DeclusorArguments(host=args.host, port=args.port, client=args.client)
         except AttributeError as e:
             raise error.ParserError(f"Missing argument: {e.name}") from e
-
-    def error(self, message: str) -> NoReturn:
-        """Overrides the default ArgumentParser error behavior."""
-
-        raise error.ParserError(message)
-
-    @staticmethod
-    def _create_formatter(*, prog: str) -> HelpFormatter:
-        return HelpFormatter(prog, max_help_position=30)

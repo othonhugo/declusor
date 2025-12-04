@@ -1,10 +1,14 @@
+from typing import Optional
+
 from declusor import interface, util
 
 
 async def call_help(session: interface.ISession, router: interface.IRouter, line: str) -> None:
-    """Display help information about available commands."""
+    """Display detailed information about available commands or a specific command."""
 
-    if line:
-        util.write_string_message(router.get_route_usage(line))
+    arguments, _ = util.parse_command_arguments(line, {"command": Optional[str]})
+
+    if help_command := arguments["command"]:
+        util.write_string_message(router.get_route_usage(help_command))
     else:
         util.write_string_message(router.documentation)

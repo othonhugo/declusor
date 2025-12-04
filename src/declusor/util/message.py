@@ -1,7 +1,55 @@
+import asyncio
+import os
 import sys
 
 
-def read_stripped_message(prompt: str = "") -> str:
+async def read_stripped_line_async(prompt: str = "") -> str:
+    """
+    Read a line from standard input asynchronously.
+
+    Args:
+        prompt: The prompt to display to the user.
+
+    Returns:
+        The input string.
+    """
+
+    if prompt:
+        sys.stdout.write(prompt)
+        sys.stdout.flush()
+
+    loop = asyncio.get_running_loop()
+    future: asyncio.Future[str] = loop.create_future()
+
+    try:
+        fd = sys.stdin.fileno()
+    except (AttributeError, ValueError):
+        return await asyncio.to_thread(sys.stdin.readline)
+
+    def on_stdin() -> None:
+        try:
+            data = os.read(fd, 4096)
+
+            if not data:
+                if not future.done():
+                    future.set_exception(EOFError())
+                return
+
+            if not future.done():
+                future.set_result(data.decode())
+        except Exception as e:
+            if not future.done():
+                future.set_exception(e)
+
+    loop.add_reader(fd, on_stdin)
+
+    try:
+        return await future
+    finally:
+        loop.remove_reader(fd)
+
+
+def read_stripped_line(prompt: str = "") -> str:
     """
     Read a message from standard input and strip whitespace.
 

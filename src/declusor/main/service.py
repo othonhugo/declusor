@@ -1,6 +1,5 @@
 import asyncio
 from os import chdir
-from os.path import exists, isdir
 
 from declusor import config, controller, core, interface, util, version
 
@@ -25,8 +24,8 @@ async def run_service(host: str, port: int, client: str) -> None:
     set_routes(router := core.Router())
 
     for directory in directories:
-        if exists(directory):
-            if not isdir(directory):
+        if directory.exists():
+            if not directory.is_dir():
                 raise NotADirectoryError(directory)
         else:
             raise FileNotFoundError(config.CLIENTS_DIR)
