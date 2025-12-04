@@ -1,8 +1,11 @@
 from shlex import quote
 from string import Template
 
-from declusor import config, error, enum
+from declusor import config, error, enums
 from declusor.util import encoding
+
+_SupportedLanguages = enums.Language
+_SupportedFunctions = enums.ExecuteFunc | enums.UploadFunc
 
 
 def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
@@ -29,7 +32,7 @@ def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
     return client_template.safe_substitute(**kwargs)
 
 
-def format_function_call(language: enum.Language, /, function_name: str, *args: str) -> str:
+def format_function_call(language: _SupportedLanguages, /, function_name: _SupportedFunctions, *args: str) -> str:
     """
     Format a function call with properly escaped arguments.
 
@@ -45,9 +48,9 @@ def format_function_call(language: enum.Language, /, function_name: str, *args: 
         InvalidOperation: If the specified language is not supported.
     """
 
-    match language.lower():
+    match language.value.lower():
         case "bash" | "sh":
-            return _format_bash_function_call(function_name, *args)
+            return _format_bash_function_call(function_name.value, *args)
         case _:
             raise error.InvalidOperation(f"Unsupported language: {language}")
 

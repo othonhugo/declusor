@@ -1,4 +1,4 @@
-from . import config, controller, core, interface, util
+from . import config, controller, core, interface, util, enums, command
 from .version import PROJECT_DESCRIPTION, PROJECT_NAME, __version__
 
 __all__ = [

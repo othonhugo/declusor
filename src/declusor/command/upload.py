@@ -1,12 +1,12 @@
-from declusor import enum, interface, util
+from declusor import enums, interface, util
 
 from pathlib import Path
 
 
 class UploadFile(interface.ICommand):
-    _FUNCTION_NAME = enum.STORE_FILE_FUNCTION
+    _FUNCTION_NAME = enums.UploadFunc.STORE_FILE
 
-    def __init__(self, filepath: str | Path, language: enum.Language = "bash") -> None:
+    def __init__(self, filepath: str | Path, language: enums.Language = enums.Language.BASH) -> None:
         self._filepath = util.ensure_file_exists(filepath)
         self._language = language
 
