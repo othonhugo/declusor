@@ -90,31 +90,30 @@ When the reverse shell is active, Declusor shows a `[declusor]` prompt.
 
 ```
 [declusor] help
+load    : Load a payload file from your local system and execute it on the remote system
+command : Execute a single command on the remote system.
+shell   : Initiate an interactive shell session on the remote system.
+upload  : Upload a file from the local system to the remote system.
+execute : Execute a program or script from the local system on the remote system.
+help    : Display detailed information about available commands or a specific command.
+exit    : Terminate the session and exit the program.
+[declusor] load discovery/dev_tools.sh
 
-load    : Load a payload from a file and send it to the remote system.
-command : Execute a command on the remote system.
-shell   : Open an interactive shell session with the target device.
-upload  : Uploads a file to the target machine.
-execute : Execute a file on the remote system.
-help    : Display help information about available commands.
-exit    : Exit the program.
-
-[declusor] load info/tools.sh
-
-USEFUL TOOLS
-------------
+DEVELOPMENT TOOLS
+-----------------
+/usr/bin/nc
+/usr/bin/netcat
 /usr/bin/gcc
 /usr/bin/wget
 /usr/bin/curl
-[declusor] 
 ```
 
 ## Customizing and Extending Payloads
 
-To fully leverage `declusor`, you can create custom payloads or modify the existing ones. Start by exploring the `data` directory, which contains two key subdirectories: `lib` and `scripts`.
+To fully leverage `declusor`, you can create custom payloads or modify the existing ones. Start by exploring the `data` directory, which contains key subdirectories: `library` and `modules`.
 
-- **`data/lib/`**: This folder contains scripts that are automatically sent to the target immediately after a connection is established. These scripts are intended to persist in the target's memory, effectively allowing the target to "remember" the subroutines. Once stored, these subroutines can be used repeatedly in combination with your payloads.
-- **`data/scripts/`**: This folder holds scripts that the target executes on demand. The output from these scripts is sent back to your server (or your prompt). The `load` command automatically scans this folder for available files and directories, simplifying the process of incorporating them into your payloads.
+- **`data/library/`**: This folder contains scripts that are automatically sent to the target immediately after a connection is established. These scripts are intended to persist in the target's memory, effectively allowing the target to "remember" the subroutines. Once stored, these subroutines can be used repeatedly in combination with your payloads.
+- **`data/modules/`**: This folder holds scripts that the target executes on demand, organized into categories. The output from these scripts is sent back to your server (or your prompt). The `load` command automatically scans this folder for available files and directories, simplifying the process of incorporating them into your payloads.
 
 ## Contributing
 
@@ -123,7 +122,7 @@ Contributions are highly encouraged and welcome! We prioritize clarity, correctn
 **Areas for contribution include:**
 
 - **New Command Handlers**: Extend Declusor's functionality by adding new commands (e.g., for specific reconnaissance, privilege escalation, or post-exploitation tasks).
-- **Payload Development**: Create new scripts for the `data/lib/` (persistent subroutines) or `data/scripts/` (on-demand execution) directories.
+- **Payload Development**: Create new scripts for the `data/library/` (persistent subroutines) or `data/modules/` (on-demand execution) directories.
 - **Cross-Platform Compatibility**: Enhance support for different operating systems, especially for the target-side one-liner or client-side execution.
 - **Documentation & Examples**: Improve existing documentation, add more detailed usage examples, or create tutorials.
 - **Bug Fixes & Robustness**: Identify and fix bugs, improve error handling, or enhance the stability of network communications.
