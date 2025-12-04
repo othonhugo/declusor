@@ -2,6 +2,7 @@ import asyncio
 from typing import AsyncGenerator
 
 from declusor import config, interface, util
+from declusor.core.console import console
 
 
 class Session(interface.ISession):
@@ -47,7 +48,7 @@ class Session(interface.ISession):
                 initial_data = await asyncio.wait_for(self.reader.read(self._bufsize), timeout=self._timeout)
 
                 if initial_data != self._DEFAULT_SERVER_ACKNOWLEDGE:
-                    util.write_warning_message("the library import may have failed.")
+                    console.write_warning_message("the library import may have failed.")
             except asyncio.TimeoutError:
                 pass
         except Exception:

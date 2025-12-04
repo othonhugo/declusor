@@ -1,4 +1,4 @@
-from declusor import command, interface, util
+from declusor import command, core, interface, util
 
 
 async def call_upload(session: interface.ISession, router: interface.IRouter, line: str) -> None:
@@ -10,4 +10,4 @@ async def call_upload(session: interface.ISession, router: interface.IRouter, li
     await command.UploadFile(filepath).execute(session)
 
     async for data in session.read():
-        util.write_binary_data(data)
+        core.console.write_binary_data(data)

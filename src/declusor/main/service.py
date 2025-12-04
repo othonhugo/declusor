@@ -31,13 +31,13 @@ async def run_service(host: str, port: int, client: str) -> None:
             raise FileNotFoundError(config.CLIENTS_DIR)
 
     chdir(config.MODULES_DIR)
-    core.set_line_completer(*router.routes)
+    core.console.setup_completer(router.routes)
 
     print(util.format_client_script(client, HOST=host, PORT=port))
 
     first_session_future: asyncio.Future[interface.ISession] = asyncio.Future()
 
-    async def client_handler(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
+    async def _client_handler(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
         session = core.Session(reader, writer)
 
         await session.initialize()
@@ -50,7 +50,7 @@ async def run_service(host: str, port: int, client: str) -> None:
         except Exception:
             pass
 
-    server = await asyncio.start_server(client_handler, host, port)
+    server = await asyncio.start_server(_client_handler, host, port)
 
     async with server:
         session = await first_session_future
