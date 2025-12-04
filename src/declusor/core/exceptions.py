@@ -33,3 +33,12 @@ class InvalidOperation(DeclusorException):
         self.description = description
 
         super().__init__(f"invalid operation: {self.description}")
+
+
+class ControllerError(DeclusorException):
+    """An error occurred in the controller."""
+
+    def __init__(self, /, description: str) -> None:
+        self.description = description
+
+        super().__init__(f"controller error: {self.description}")
