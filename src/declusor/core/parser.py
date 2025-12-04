@@ -1,4 +1,4 @@
-from declusor import config, error, interface, util
+from declusor import config, interface, util
 
 
 class DeclusorParser(util.Parser):
@@ -21,11 +21,11 @@ class DeclusorParser(util.Parser):
 
         self.add_argument("host", help=self.info["host"], type=str)
         self.add_argument("port", help=self.info["port"], type=int)
-        self.add_argument("-c", "--client", help=self.info["client"], type=str, default=config.DEFAULT_CLIENT)
+        self.add_argument("-c", "--client", help=self.info["client"], type=str, default=config.Settings.DEFAULT_CLIENT)
 
         args = self.parse_args()
 
         try:
             return interface.DeclusorArguments(host=args.host, port=args.port, client=args.client)
         except AttributeError as e:
-            raise error.ParserError(f"Missing argument: {e.name}") from e
+            raise config.ParserError(f"Missing argument: {e.name}") from e

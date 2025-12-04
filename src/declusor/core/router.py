@@ -1,4 +1,4 @@
-from declusor import error, interface
+from declusor import config, interface
 
 
 class Router(interface.IRouter):
@@ -41,7 +41,7 @@ class Router(interface.IRouter):
         if controller := self.route_table.get(route.strip()):
             return controller
 
-        raise error.RouterError(route)
+        raise config.RouterError(route)
 
     @property
     def documentation(self) -> str:

@@ -1,4 +1,4 @@
-from declusor import error, interface
+from declusor import config, interface
 from declusor.core.console import console
 
 
@@ -36,7 +36,7 @@ class PromptCLI(interface.IPrompt):
         while True:
             try:
                 await self.handle_route(await self.read_command())
-            except (error.ExitRequest, KeyboardInterrupt):
+            except (config.ExitRequest, KeyboardInterrupt):
                 break
-            except error.DeclusorException as e:
+            except config.DeclusorException as e:
                 console.write_error_message(str(e))

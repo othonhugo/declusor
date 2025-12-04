@@ -1,7 +1,7 @@
 from shlex import quote
 from string import Template
 
-from declusor import config, enums, error
+from declusor import config
 from declusor.util import encoding
 
 
@@ -17,19 +17,19 @@ def format_client_script(client_name: str, /, **kwargs: str | int) -> str:
         The formatted client script with variables substituted.
     """
 
-    client_filepath = (config.CLIENTS_DIR / client_name).resolve()
+    client_filepath = (config.BasePath.CLIENTS_DIR / client_name).resolve()
 
     with open(client_filepath, "r", encoding="utf-8") as f:
         client_script = f.read()
 
-    kwargs[config.DEFAULT_ACK_PLACEHOLDER] = encoding.convert_bytes_to_hex(config.DEFAULT_ACK_VALUE)
+    kwargs[config.Settings.ACK_CLIENT_PLACEHOLDER] = encoding.convert_bytes_to_hex(config.Settings.ACK_CLIENT_VALUE)
 
     client_template = Template(client_script)
 
     return client_template.safe_substitute(**kwargs)
 
 
-def format_function_call(language: enums.Language, /, function_name: enums.FileFunc, *args: str) -> str:
+def format_function_call(language: config.Language, /, function_name: config.FileFunc, *args: str) -> str:
     """
     Format a function call with properly escaped arguments.
 
@@ -46,10 +46,10 @@ def format_function_call(language: enums.Language, /, function_name: enums.FileF
     """
 
     match language:
-        case enums.Language.BASH | enums.Language.SH:
+        case config.Language.BASH | config.Language.SH:
             return _format_bash_function_call(function_name.value, *args)
         case _:
-            raise error.InvalidOperation(f"Unsupported language: {language}")
+            raise config.InvalidOperation(f"Unsupported language: {language}")
 
 
 def _format_bash_function_call(function_name: str, /, *args: str) -> str:

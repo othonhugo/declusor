@@ -2,7 +2,7 @@ import shlex
 from argparse import ArgumentParser, HelpFormatter
 from typing import Any, Callable, Mapping, NoReturn, Type, Union, get_args, get_origin
 
-from declusor import error
+from declusor import config
 
 ArgumentDefinitions = Mapping[str, Type[Any] | Union[Any]]
 """The definitions: `argument name` -> `expected type`"""
@@ -35,7 +35,7 @@ class Parser(ArgumentParser):
     def error(self, message: str) -> NoReturn:
         """Overrides the default ArgumentParser error behavior."""
 
-        raise error.ParserError(message)
+        raise config.ParserError(message)
 
     def get_formatter_class(self) -> Callable[..., HelpFormatter]:
         """Subclasses can override this to customize help formatting."""
@@ -85,7 +85,7 @@ def parse_command_arguments(line: str, definitions: ArgumentDefinitions, allow_u
                     arg_type = actual_types[0]
 
         if arg_type not in supported_types:
-            raise error.InvalidOperation(f"Argument type {arg_type!r} for {arg_name!r} is not supported.")
+            raise config.InvalidOperation(f"Argument type {arg_type!r} for {arg_name!r} is not supported.")
 
         kwargs: dict[str, Any] = {"type": arg_type}
 
@@ -97,7 +97,7 @@ def parse_command_arguments(line: str, definitions: ArgumentDefinitions, allow_u
     try:
         args_list = shlex.split(line)
     except ValueError as e:
-        raise error.InvalidOperation(f"Parsing error: {e}") from e
+        raise config.InvalidOperation(f"Parsing error: {e}") from e
 
     if allow_unknown:
         namespace, unrecognized_args = parser.parse_known_args(args_list)

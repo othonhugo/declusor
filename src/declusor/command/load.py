@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from declusor import error, interface, util
+from declusor import config, interface, util
 
 
 class LoadPayload(interface.ICommand):
@@ -28,6 +28,6 @@ class LoadPayload(interface.ICommand):
         """
 
         if (file_content := util.try_load_file(self._filepath)) is None:
-            raise error.InvalidOperation(f"failed to load file content: {self._filepath!r}")
+            raise config.InvalidOperation(f"failed to load file content: {self._filepath!r}")
 
         await session.write(file_content)

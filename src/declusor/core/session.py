@@ -8,8 +8,8 @@ from declusor.core.console import console
 class Session(interface.ISession):
     """Manages a session over an asyncio connection, handling reading and writing of data."""
 
-    _DEFAULT_CLIENT_ACKNOWLEDGE = b"\x00"
-    _DEFAULT_SERVER_ACKNOWLEDGE = config.DEFAULT_ACK_VALUE
+    _DEFAULT_SERVER_ACKNOWLEDGE = config.Settings.ACK_SERVER_VALUE
+    _DEFAULT_CLIENT_ACKNOWLEDGE = config.Settings.ACK_CLIENT_VALUE
     _DEFAULT_BUFFER_SIZE = 4096
     _DEFAULT_TIMEOUT = 0.75
 
@@ -47,7 +47,7 @@ class Session(interface.ISession):
             try:
                 initial_data = await asyncio.wait_for(self.reader.read(self._bufsize), timeout=self._timeout)
 
-                if initial_data != self._DEFAULT_SERVER_ACKNOWLEDGE:
+                if initial_data != self._DEFAULT_CLIENT_ACKNOWLEDGE:
                     console.write_warning_message("the library import may have failed.")
             except asyncio.TimeoutError:
                 pass
@@ -64,7 +64,7 @@ class Session(interface.ISession):
 
         async def _read_generator() -> AsyncGenerator[bytes, None]:
             buffer = bytearray()
-            ack_len = len(self._DEFAULT_SERVER_ACKNOWLEDGE)
+            ack_len = len(self._DEFAULT_CLIENT_ACKNOWLEDGE)
 
             while True:
                 try:
@@ -76,7 +76,7 @@ class Session(interface.ISession):
                     buffer.extend(chunk)
 
                     search_start = max(0, len(buffer) - len(chunk) - ack_len)
-                    ack_index = buffer.find(self._DEFAULT_SERVER_ACKNOWLEDGE, search_start)
+                    ack_index = buffer.find(self._DEFAULT_CLIENT_ACKNOWLEDGE, search_start)
 
                     if ack_index != -1:
                         yield bytes(buffer[:ack_index])
@@ -103,7 +103,7 @@ class Session(interface.ISession):
 
         try:
             self.writer.write(content)
-            self.writer.write(self._DEFAULT_CLIENT_ACKNOWLEDGE)
+            self.writer.write(self._DEFAULT_SERVER_ACKNOWLEDGE)
 
             await self.writer.drain()
         except OSError as e:

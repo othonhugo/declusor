@@ -19,7 +19,7 @@ def set_routes(router: interface.IRouter) -> None:
 async def run_service(host: str, port: int, client: str) -> None:
     """Run the main service loop."""
 
-    directories = [config.CLIENTS_DIR, config.MODULES_DIR, config.LIBRARY_DIR]
+    directories = [config.BasePath.CLIENTS_DIR, config.BasePath.MODULES_DIR, config.BasePath.LIBRARY_DIR]
 
     set_routes(router := core.Router())
 
@@ -28,9 +28,9 @@ async def run_service(host: str, port: int, client: str) -> None:
             if not directory.is_dir():
                 raise NotADirectoryError(directory)
         else:
-            raise FileNotFoundError(config.CLIENTS_DIR)
+            raise FileNotFoundError(config.BasePath.CLIENTS_DIR)
 
-    chdir(config.MODULES_DIR)
+    chdir(config.BasePath.MODULES_DIR)
     core.console.setup_completer(router.routes)
 
     print(util.format_client_script(client, HOST=host, PORT=port))
