@@ -55,12 +55,12 @@ def load_payload(module_filename: str, /) -> bytes:
         InvalidOperation: If the file extension is not supported or the file is outside the scripts directory.
     """
 
-    module_filepath = (config.SCRIPTS_DIR / module_filename).resolve()
+    module_filepath = (config.MODULES_DIR / module_filename).resolve()
 
     if not security.validate_file_extension(module_filename, config.ALLOW_PAYLOAD_EXTENSIONS):
         raise error.InvalidOperation(f"extension of {module_filepath.name!r} is not supported")
 
-    if not security.validate_file_relative(module_filepath, config.SCRIPTS_DIR):
+    if not security.validate_file_relative(module_filepath, config.MODULES_DIR):
         raise error.InvalidOperation(f"{module_filepath!r} is outside the scripts directory")
 
     return load_file(module_filepath)

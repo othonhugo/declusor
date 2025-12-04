@@ -9,8 +9,8 @@ DATA_DIR = (ROOT_DIR / "data").resolve()
 CLIENTS_DIR = (DATA_DIR / "clients").resolve()
 """Normalized clients directory path."""
 
-SCRIPTS_DIR = (DATA_DIR / "scripts").resolve()
-"""Normalized scripts directory path."""
+MODULES_DIR = (DATA_DIR / "modules").resolve()
+"""Normalized modules directory path."""
 
 LIBRARY_DIR = (DATA_DIR / "lib").resolve()
 """Normalized library directory path."""
