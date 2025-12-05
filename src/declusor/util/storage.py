@@ -98,7 +98,7 @@ def ensure_file_exists(filepath: str | Path, /) -> Path:
         Path: The resolved file path.
 
     Raises:
-        core.InvalidOperation: If the file does not exist or is not a file.
+        InvalidOperation: If the file does not exist or is not a file.
     """
 
     filepath = Path(filepath).resolve()
@@ -122,7 +122,7 @@ def ensure_directory_exists(dirpath: str | Path, /) -> Path:
         Path: The resolved directory path.
 
     Raises:
-        core.InvalidOperation: If the directory does not exist or is not a directory.
+        InvalidOperation: If the directory does not exist or is not a directory.
     """
 
     dirpath = Path(dirpath).resolve()
