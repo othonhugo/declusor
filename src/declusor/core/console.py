@@ -1,20 +1,20 @@
-import asyncio
 import atexit
 import glob
 import os
 import readline
-import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
+from declusor import interface
 
-class Console:
+
+class Console(interface.IConsole):
     """A robust and modular console handler for asynchronous input reading."""
 
     def __init__(self) -> None:
         self._history_file: Optional[Path] = None
 
-    def setup_completer(self, command_routes: Sequence[str]) -> None:
+    def setup_completer(self, command_routes: Sequence[str], /) -> None:
         """Set up the readline completer for command line input.
 
         Args:
@@ -41,8 +41,6 @@ class Console:
                 for filename in glob.glob(searching_file + "*", root_dir=target_dir):
                     filepath = os.path.join(target_dir, filename)
 
-                    # Prepend the searching directory to the filename so readline
-                    # replaces the entire path, not just the filename part.
                     match_string = os.path.join(searching_dir, filename)
 
                     if os.path.isdir(filepath):
@@ -79,7 +77,6 @@ class Console:
                     return _find_command(text, state)
                 case 2:
                     if commands[0] in command_routes:
-                        # Complete file path for the argument
                         return _find_file(text, state)
                 case _:
                     return None
@@ -90,7 +87,7 @@ class Console:
         readline.set_completer(_complete_line)
         readline.parse_and_bind("tab: complete")
 
-    def enable_history(self, history_file: Path) -> None:
+    def enable_history(self, history_file: Path, /) -> None:
         """Enable history saving and loading.
 
         Args:
@@ -118,77 +115,3 @@ class Console:
                 readline.write_history_file(str(self._history_file))
             except (FileNotFoundError, PermissionError):
                 pass
-
-    async def read_line(self, prompt: str = "") -> str:
-        """
-        Read a line from standard input asynchronously using a thread executor.
-
-        Args:
-            prompt: The prompt to display to the user.
-
-        Returns:
-            The input string.
-        """
-
-        return await asyncio.to_thread(input, prompt)
-
-    async def read_stripped_line(self, prompt: str = "") -> str:
-        """
-        Read a line from standard input asynchronously and strip whitespace.
-
-        Args:
-            prompt: The prompt to display to the user.
-
-        Returns:
-            The stripped input string.
-        """
-
-        return (await self.read_line(prompt)).strip()
-
-    def write_message(self, message: str) -> None:
-        """
-        Write a message to standard output.
-
-        Args:
-            message: The message string to write.
-        """
-
-        sys.stdout.write(message + "\n")
-        sys.stdout.flush()
-
-    def write_binary_data(self, message: bytes) -> None:
-        """
-        Write a binary message to standard output.
-
-        Args:
-            message: The binary data to write.
-        """
-
-        sys.stdout.buffer.write(message)
-        sys.stdout.buffer.flush()
-
-    def write_error_message(self, message: str | BaseException) -> None:
-        """
-        Write an error message to standard error.
-
-        Args:
-            message: The error message or exception to write.
-        """
-
-        sys.stderr.write(f"error: {message}\n")
-        sys.stderr.flush()
-
-    def write_warning_message(self, message: str | BaseException) -> None:
-        """
-        Write a warning message to standard error.
-
-        Args:
-            message: The warning message or exception to write.
-        """
-
-        sys.stderr.write(f"warning: {message}\n")
-        sys.stderr.flush()
-
-
-console = Console()
-"""Global instance for easy access."""
