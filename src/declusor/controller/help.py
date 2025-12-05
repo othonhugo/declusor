@@ -1,4 +1,3 @@
-from functools import wraps
 from typing import Callable, Optional
 
 from declusor import interface, util
@@ -18,7 +17,6 @@ def create_help_controller(get_documentation: DocumentationProvider, get_route_u
         Help controller function.
     """
 
-    @wraps(create_help_controller)
     async def call_help(session: interface.ISession, console: interface.IConsole, line: str) -> None:
         """Display detailed information about available commands or a specific command."""
 
