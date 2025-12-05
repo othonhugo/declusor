@@ -9,7 +9,6 @@ from typing import Optional
 
 import pytest
 
-
 # =============================================================================
 # Fixtures
 # =============================================================================
@@ -175,7 +174,7 @@ def test_parse_command_arguments_missing_required_arg_raises() -> None:
 
 def test_parse_command_arguments_wrong_type_raises() -> None:
     """
-    Given: definitions={"count": int} and line="not_a_number"  
+    Given: definitions={"count": int} and line="not_a_number"
     When: parse_command_arguments is called
     Then: Raises ParserError about invalid int value
     """

@@ -9,7 +9,6 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-
 # =============================================================================
 # Fixtures
 # =============================================================================
@@ -41,9 +40,7 @@ def temp_script(tmp_path: Path) -> Path:
 
 
 @pytest.mark.asyncio
-async def test_call_execute_parses_filepath_argument(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path
-) -> None:
+async def test_call_execute_parses_filepath_argument(mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path) -> None:
     """
     Given: call_execute with line=str(temp_script)
     When: Controller parses arguments
@@ -52,9 +49,7 @@ async def test_call_execute_parses_filepath_argument(
 
 
 @pytest.mark.asyncio
-async def test_call_execute_missing_filepath_raises(
-    mock_session: AsyncMock, mock_router: MagicMock
-) -> None:
+async def test_call_execute_missing_filepath_raises(mock_session: AsyncMock, mock_router: MagicMock) -> None:
     """
     Given: call_execute with empty line ""
     When: Controller parses arguments
@@ -68,9 +63,7 @@ async def test_call_execute_missing_filepath_raises(
 
 
 @pytest.mark.asyncio
-async def test_call_execute_validates_file_exists(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path
-) -> None:
+async def test_call_execute_validates_file_exists(mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path) -> None:
     """
     Given: call_execute with valid filepath
     When: Controller validates file
@@ -79,9 +72,7 @@ async def test_call_execute_validates_file_exists(
 
 
 @pytest.mark.asyncio
-async def test_call_execute_nonexistent_file_raises(
-    mock_session: AsyncMock, mock_router: MagicMock
-) -> None:
+async def test_call_execute_nonexistent_file_raises(mock_session: AsyncMock, mock_router: MagicMock) -> None:
     """
     Given: call_execute with "/nonexistent/script.sh"
     When: Controller validates file
@@ -90,9 +81,7 @@ async def test_call_execute_nonexistent_file_raises(
 
 
 @pytest.mark.asyncio
-async def test_call_execute_directory_raises(
-    mock_session: AsyncMock, mock_router: MagicMock, tmp_path: Path
-) -> None:
+async def test_call_execute_directory_raises(mock_session: AsyncMock, mock_router: MagicMock, tmp_path: Path) -> None:
     """
     Given: call_execute with directory path
     When: Controller validates file
@@ -106,9 +95,7 @@ async def test_call_execute_directory_raises(
 
 
 @pytest.mark.asyncio
-async def test_call_execute_creates_execute_file_command(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path
-) -> None:
+async def test_call_execute_creates_execute_file_command(mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path) -> None:
     """
     Given: call_execute with valid script
     When: Controller executes
@@ -117,9 +104,7 @@ async def test_call_execute_creates_execute_file_command(
 
 
 @pytest.mark.asyncio
-async def test_call_execute_sends_to_session(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path
-) -> None:
+async def test_call_execute_sends_to_session(mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path) -> None:
     """
     Given: call_execute with valid script
     When: Controller executes
@@ -133,9 +118,7 @@ async def test_call_execute_sends_to_session(
 
 
 @pytest.mark.asyncio
-async def test_call_execute_reads_response(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path
-) -> None:
+async def test_call_execute_reads_response(mock_session: AsyncMock, mock_router: MagicMock, temp_script: Path) -> None:
     """
     Given: Script produces output on target
     When: call_execute completes

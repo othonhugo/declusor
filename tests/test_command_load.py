@@ -9,7 +9,6 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-
 # =============================================================================
 # Fixtures
 # =============================================================================
@@ -76,9 +75,7 @@ def test_load_payload_init_stores_filepath(temp_payload: Path) -> None:
 
 
 @pytest.mark.asyncio
-async def test_load_payload_execute_writes_file_content(
-    mock_session: AsyncMock, temp_payload: Path
-) -> None:
+async def test_load_payload_execute_writes_file_content(mock_session: AsyncMock, temp_payload: Path) -> None:
     """
     Given: LoadPayload with payload containing "echo test"
     When: execute(session) is called
@@ -87,9 +84,7 @@ async def test_load_payload_execute_writes_file_content(
 
 
 @pytest.mark.asyncio
-async def test_load_payload_execute_writes_bytes(
-    mock_session: AsyncMock, temp_payload: Path
-) -> None:
+async def test_load_payload_execute_writes_bytes(mock_session: AsyncMock, temp_payload: Path) -> None:
     """
     Given: LoadPayload with valid payload
     When: execute(session) is called
@@ -98,9 +93,7 @@ async def test_load_payload_execute_writes_bytes(
 
 
 @pytest.mark.asyncio
-async def test_load_payload_execute_reads_file_at_execution_time(
-    mock_session: AsyncMock, temp_payload: Path
-) -> None:
+async def test_load_payload_execute_reads_file_at_execution_time(mock_session: AsyncMock, temp_payload: Path) -> None:
     """
     Given: LoadPayload initialized with valid file
     When: File is modified before execute()
@@ -109,9 +102,7 @@ async def test_load_payload_execute_reads_file_at_execution_time(
 
 
 @pytest.mark.asyncio
-async def test_load_payload_execute_raises_on_load_failure(
-    mock_session: AsyncMock, temp_payload: Path
-) -> None:
+async def test_load_payload_execute_raises_on_load_failure(mock_session: AsyncMock, temp_payload: Path) -> None:
     """
     Given: File becomes unreadable between init and execute
     When: execute() calls try_load_file and gets None
@@ -120,9 +111,7 @@ async def test_load_payload_execute_raises_on_load_failure(
 
 
 @pytest.mark.asyncio
-async def test_load_payload_execute_raises_with_filepath_in_message(
-    mock_session: AsyncMock, temp_payload: Path
-) -> None:
+async def test_load_payload_execute_raises_with_filepath_in_message(mock_session: AsyncMock, temp_payload: Path) -> None:
     """
     Given: File load fails
     When: InvalidOperation is raised
@@ -157,9 +146,7 @@ def test_load_payload_does_not_use_file_func() -> None:
 
 
 @pytest.mark.asyncio
-async def test_load_payload_handles_empty_file(
-    mock_session: AsyncMock, tmp_path: Path
-) -> None:
+async def test_load_payload_handles_empty_file(mock_session: AsyncMock, tmp_path: Path) -> None:
     """
     Given: Empty payload file
     When: execute() is called
@@ -168,9 +155,7 @@ async def test_load_payload_handles_empty_file(
 
 
 @pytest.mark.asyncio
-async def test_load_payload_handles_binary_content(
-    mock_session: AsyncMock, tmp_path: Path
-) -> None:
+async def test_load_payload_handles_binary_content(mock_session: AsyncMock, tmp_path: Path) -> None:
     """
     Given: Payload with binary content
     When: execute() is called
@@ -179,9 +164,7 @@ async def test_load_payload_handles_binary_content(
 
 
 @pytest.mark.asyncio
-async def test_load_payload_handles_multiline_script(
-    mock_session: AsyncMock, temp_payload: Path
-) -> None:
+async def test_load_payload_handles_multiline_script(mock_session: AsyncMock, temp_payload: Path) -> None:
     """
     Given: Multi-line bash script
     When: execute() is called

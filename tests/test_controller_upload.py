@@ -9,7 +9,6 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-
 # =============================================================================
 # Fixtures
 # =============================================================================
@@ -41,9 +40,7 @@ def temp_file(tmp_path: Path) -> Path:
 
 
 @pytest.mark.asyncio
-async def test_call_upload_parses_filepath_argument(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path
-) -> None:
+async def test_call_upload_parses_filepath_argument(mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path) -> None:
     """
     Given: call_upload with line=str(temp_file)
     When: Controller parses arguments
@@ -52,9 +49,7 @@ async def test_call_upload_parses_filepath_argument(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_missing_filepath_raises(
-    mock_session: AsyncMock, mock_router: MagicMock
-) -> None:
+async def test_call_upload_missing_filepath_raises(mock_session: AsyncMock, mock_router: MagicMock) -> None:
     """
     Given: call_upload with empty line ""
     When: Controller parses arguments
@@ -63,9 +58,7 @@ async def test_call_upload_missing_filepath_raises(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_parses_quoted_path(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path
-) -> None:
+async def test_call_upload_parses_quoted_path(mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path) -> None:
     """
     Given: call_upload with path containing spaces in quotes
     When: Controller parses arguments
@@ -79,9 +72,7 @@ async def test_call_upload_parses_quoted_path(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_validates_file_exists(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path
-) -> None:
+async def test_call_upload_validates_file_exists(mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path) -> None:
     """
     Given: call_upload with valid filepath
     When: Controller validates file
@@ -90,9 +81,7 @@ async def test_call_upload_validates_file_exists(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_nonexistent_file_raises(
-    mock_session: AsyncMock, mock_router: MagicMock
-) -> None:
+async def test_call_upload_nonexistent_file_raises(mock_session: AsyncMock, mock_router: MagicMock) -> None:
     """
     Given: call_upload with "/nonexistent/file.txt"
     When: Controller validates file
@@ -101,9 +90,7 @@ async def test_call_upload_nonexistent_file_raises(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_directory_raises(
-    mock_session: AsyncMock, mock_router: MagicMock, tmp_path: Path
-) -> None:
+async def test_call_upload_directory_raises(mock_session: AsyncMock, mock_router: MagicMock, tmp_path: Path) -> None:
     """
     Given: call_upload with directory path
     When: Controller validates file
@@ -117,9 +104,7 @@ async def test_call_upload_directory_raises(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_creates_upload_file_command(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path
-) -> None:
+async def test_call_upload_creates_upload_file_command(mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path) -> None:
     """
     Given: call_upload with valid file
     When: Controller executes
@@ -128,9 +113,7 @@ async def test_call_upload_creates_upload_file_command(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_sends_to_session(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path
-) -> None:
+async def test_call_upload_sends_to_session(mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path) -> None:
     """
     Given: call_upload with valid file
     When: Controller executes
@@ -144,9 +127,7 @@ async def test_call_upload_sends_to_session(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_reads_response(
-    mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path
-) -> None:
+async def test_call_upload_reads_response(mock_session: AsyncMock, mock_router: MagicMock, temp_file: Path) -> None:
     """
     Given: Upload produces response (e.g., stored filepath)
     When: call_upload completes
@@ -166,9 +147,7 @@ async def test_call_upload_writes_response_to_console(
 
 
 @pytest.mark.asyncio
-async def test_call_upload_shows_stored_path(
-    mock_session: AsyncMock, mock_router: MagicMock, mock_console: MagicMock, temp_file: Path
-) -> None:
+async def test_call_upload_shows_stored_path(mock_session: AsyncMock, mock_router: MagicMock, mock_console: MagicMock, temp_file: Path) -> None:
     """
     Given: Target returns "/tmp/abc123.temp" after upload
     When: call_upload processes response

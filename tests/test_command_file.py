@@ -11,7 +11,6 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-
 # =============================================================================
 # Fixtures
 # =============================================================================
@@ -128,9 +127,7 @@ def test_execute_file_func_name_is_exec_file() -> None:
 
 
 @pytest.mark.asyncio
-async def test_execute_file_execute_sends_command(
-    mock_session: AsyncMock, temp_script: Path
-) -> None:
+async def test_execute_file_execute_sends_command(mock_session: AsyncMock, temp_script: Path) -> None:
     """
     Given: ExecuteFile with valid script
     When: execute(session) is called
@@ -160,9 +157,7 @@ def test_upload_file_func_name_is_store_file() -> None:
 
 
 @pytest.mark.asyncio
-async def test_upload_file_execute_sends_command(
-    mock_session: AsyncMock, temp_script: Path
-) -> None:
+async def test_upload_file_execute_sends_command(mock_session: AsyncMock, temp_script: Path) -> None:
     """
     Given: UploadFile with valid file
     When: execute(session) is called

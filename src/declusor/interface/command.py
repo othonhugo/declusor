@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from declusor.interface.session import ISession
     from declusor.interface.console import IConsole
+    from declusor.interface.session import ISession
 
 
 class ICommand(ABC):

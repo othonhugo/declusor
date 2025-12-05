@@ -6,7 +6,7 @@ T = TypeVar("T")
 
 class IParser(ABC, Generic[T]):
     """Abstract base class defining the argument parser interface.
-    
+
     Generic parser interface for parsing command-line arguments into
     a specific type T.
     """
@@ -14,7 +14,7 @@ class IParser(ABC, Generic[T]):
     @abstractmethod
     def parse(self) -> T:
         """Parse command-line arguments.
-        
+
         Returns:
             Parsed arguments of type T.
         """

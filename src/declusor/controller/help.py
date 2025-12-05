@@ -1,5 +1,5 @@
-from typing import Callable, Optional
 from functools import wraps
+from typing import Callable, Optional
 
 from declusor import interface, util
 

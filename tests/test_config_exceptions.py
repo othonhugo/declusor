@@ -12,7 +12,6 @@ This module tests the custom exception hierarchy:
 
 import pytest
 
-
 # =============================================================================
 # Tests: DeclusorException (base class)
 # =============================================================================

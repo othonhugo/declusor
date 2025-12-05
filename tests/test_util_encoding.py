@@ -8,7 +8,6 @@ This module tests encoding/decoding utilities including:
 
 import pytest
 
-
 # =============================================================================
 # Tests: convert_bytes_to_hex
 # =============================================================================
