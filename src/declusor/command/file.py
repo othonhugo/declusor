@@ -17,6 +17,9 @@ class _BaseFileCommand(interface.ICommand):
             language: The language of the target environment.
         """
 
+        if self.FUNC_NAME == NotImplemented:
+            raise NotImplementedError("FUNC_NAME must be defined in subclasses.")
+
         self._filepath = util.ensure_file_exists(filepath)
         self._language = language
 
